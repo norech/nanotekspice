@@ -4,17 +4,13 @@
 
 namespace nts {
 
-ClockComponent::ClockComponent()
-    : InputComponent()
-{
-}
+ClockComponent::ClockComponent() : InputComponent() {}
 
-ClockComponent::~ClockComponent() { }
+ClockComponent::~ClockComponent() {}
 
-void ClockComponent::simulate(std::size_t tick)
-{
+void ClockComponent::simulate(std::size_t tick) {
     InputComponent::simulate(tick);
     value = (value == TRUE) ? FALSE : TRUE;
 }
 
-} // namespace nts
+}  // namespace nts
