@@ -1,18 +1,25 @@
 #pragma once
 
-#include "../State.hpp"
+#include "../Tristate.hpp"
 #include "./IComponent.hpp"
+
+namespace nts {
 
 class InputComponent : public IComponent {
 public:
     InputComponent();
     ~InputComponent();
     InputComponent(const InputComponent& other) = default;
-    operator=(const InputComponent& other) = default;
+    InputComponent& operator=(const InputComponent& other) = default;
 
-    State getValue() const override;
-    void nextSimulation() override;
+    void simulate(std::size_t tick) override;
+    Tristate compute(std::size_t pin) override;
+    void setLink(std::size_t pin, nts::IComponent& other,
+                 std::size_t otherPin) override;
+    void dump() const override;
 
-private:
-    State value = UNDEFINED;
+protected:
+    nts::Tristate value = UNDEFINED;
 };
+
+}  // namespace nts
