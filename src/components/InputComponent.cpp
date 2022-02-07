@@ -1,9 +1,14 @@
 #include "InputComponent.hpp"
 
-InputComponent::InputComponent() {}
+nts::InputComponent::InputComponent() {}
 
-InputComponent::~InputComponent() {}
+nts::InputComponent::~InputComponent() {}
 
-State InputComponent::getValue() const override { return value; }
+void nts::InputComponent::simulate(std::size_t tick) override {}
 
-void InputComponent::nextSimulation() override {}
+nts::Tristate nts::InputComponent::compute(std::size_t pin) override {}
+
+void nts::InputComponent::setLink(std::size_t pin, nts::IComponent& other,
+                                  std::size_t otherPin) override {}
+
+void nts::InputComponent::dump() const override {}
