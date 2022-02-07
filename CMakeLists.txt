@@ -6,4 +6,8 @@ set(SRC
     src/main.cpp
 )
 
+include_directories(
+    src/
+)
+
 add_executable(nanotekspice ${SRC})
