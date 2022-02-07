@@ -13,13 +13,13 @@ public:
     InputComponent& operator=(const InputComponent& other) = default;
 
     virtual void simulate(std::size_t tick) override;
-    Tristate compute(std::size_t pin) override;
-    void setLink(std::size_t pin, nts::IComponent& other,
-                 std::size_t otherPin) override;
-    void dump() const override;
+    Tristate compute(std::size_t pin) final;
+    void setLink(std::size_t pin, IComponent& other,
+        std::size_t otherPin) final;
+    void dump() const final;
 
 protected:
-    nts::Tristate value = UNDEFINED;
+    Tristate value = UNDEFINED;
 };
 
-}  // namespace nts
+} // namespace nts

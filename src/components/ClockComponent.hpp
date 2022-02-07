@@ -9,7 +9,7 @@ public:
     ClockComponent();
     ~ClockComponent();
 
-    void simulate(std::size_t tick) override;
+    void simulate(std::size_t tick) final;
 };
 
-}  // namespace nts
+} // namespace nts
