@@ -1,28 +1,41 @@
 #include "ComponentManager.hpp"
 
+#include <functional>
+#include <unordered_map>
+
 namespace nts {
 
 ComponentManager::ComponentManager() {}
 
 ComponentManager::~ComponentManager() {}
 
-std::unique_ptr<IComponent> createComponent(const std::string& type) {
-    switch (type) {
-        case "4001":
-            return create4001();
-        case "4013":
-            return create4013();
-        case "4040":
-            return create4040();
-        default:
-            throw new Error("Unknown component type");
+std::unique_ptr<IComponent> ComponentManager::createComponent(
+    const std::string& type) {
+    std::unordered_map<std::string,
+                       std::function<std::unique_ptr<IComponent>()>>
+        component_map = {
+            {"4001", [this]() { return create4001(); }},
+            {"4013", [this]() { return create4013(); }},
+            {"4040", [this]() { return create4040(); }},
+        };
+
+    auto component = component_map.find(type);
+    if (component == component_map.end()) {
+        throw Error("Unknown component type");
     }
+    return component->second();
 }
 
-std::unique_ptr<IComponent> create4001() const noexcept {}
+std::unique_ptr<IComponent> ComponentManager::create4001() const noexcept {
+    throw new Error("Not implemented");
+}
 
-std::unique_ptr<IComponent> create4013() const noexcept {}
+std::unique_ptr<IComponent> ComponentManager::create4013() const noexcept {
+    throw new Error("Not implemented");
+}
 
-std::unique_ptr<IComponent> create4040() const noexcept {}
+std::unique_ptr<IComponent> ComponentManager::create4040() const noexcept {
+    throw new Error("Not implemented");
+}
 
 }  // namespace nts

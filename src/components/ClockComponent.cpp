@@ -2,11 +2,15 @@
 
 #include "InputComponent.hpp"
 
-nts::ClockComponent::ClockComponent() : InputComponent() {}
+namespace nts {
 
-nts::ClockComponent::~ClockComponent() : ~InputComponent() {}
+ClockComponent::ClockComponent() : InputComponent() {}
 
-void nts::ClockComponent::simulate(std::size_t tick) override {
+ClockComponent::~ClockComponent() {}
+
+void ClockComponent::simulate(std::size_t tick) {
     InputComponent::simulate(tick);
     value = (value == TRUE) ? FALSE : TRUE;
 }
+
+}  // namespace nts

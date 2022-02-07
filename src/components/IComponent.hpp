@@ -8,7 +8,7 @@ namespace nts {
 
 class IComponent {
 public:
-    IComponent();
+    IComponent() = default;
     virtual ~IComponent() = default;
 
     virtual void simulate(std::size_t tick) = 0;
