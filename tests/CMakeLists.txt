@@ -4,7 +4,7 @@ project(nano_tests)
 
 set(CMAKE_CXX_STANDARD 20)
 
-file(GLOB_RECURSE SRC *.cpp) #*.cpp ../src/*.cpp ../src/components/*.cpp)
+file(GLOB_RECURSE SRC *.cpp ../src/*.cpp ../src/components/*.cpp)
 
 include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/../src"

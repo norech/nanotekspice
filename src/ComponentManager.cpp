@@ -27,15 +27,15 @@ std::unique_ptr<IComponent> ComponentManager::createComponent(
 }
 
 std::unique_ptr<IComponent> ComponentManager::create4001() const noexcept {
-    throw new Error("Not implemented");
+    throw Error("Not implemented");
 }
 
 std::unique_ptr<IComponent> ComponentManager::create4013() const noexcept {
-    throw new Error("Not implemented");
+    throw Error("Not implemented");
 }
 
 std::unique_ptr<IComponent> ComponentManager::create4040() const noexcept {
-    throw new Error("Not implemented");
+    throw Error("Not implemented");
 }
 
 }  // namespace nts
