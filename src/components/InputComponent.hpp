@@ -10,16 +10,16 @@ public:
     InputComponent();
     ~InputComponent();
     InputComponent(const InputComponent& other) = default;
-    operator=(const InputComponent& other) = default;
+    InputComponent& operator=(const InputComponent& other) = default;
 
     void simulate(std::size_t tick) override;
-    nts::Tristate compute(std::size_t pin) override;
+    Tristate compute(std::size_t pin) override;
     void setLink(std::size_t pin, nts::IComponent& other,
                  std::size_t otherPin) override;
     void dump() const override;
 
 protected:
-    State value = UNDEFINED;
+    nts::Tristate value = UNDEFINED;
 };
 
 }  // namespace nts
