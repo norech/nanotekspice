@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "../State.hpp"
+#include "../Tristate.hpp"
 
 namespace nts {
 
