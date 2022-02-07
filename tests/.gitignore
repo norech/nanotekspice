@@ -1,0 +1,8 @@
+bin
+CMakeFiles
+CMakeCache.txt
+_deps
+cmake_install.cmake
+lib
+Makefile
+nano_tests
