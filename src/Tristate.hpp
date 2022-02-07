@@ -1,3 +1,7 @@
 #pragma once
 
-enum Tristate { TRUE, FALSE, UNDEFINED };
+namespace nts {
+
+enum Tristate { TRUE = true, FALSE = false, UNDEFINED = (-true) };
+
+}
