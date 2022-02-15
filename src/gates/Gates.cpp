@@ -1,22 +1,31 @@
+#include "Gates.hpp"
+
 namespace nts {
-Trigate andGate(const Trigate a, const Trigate b) {
+Tristate andGate(const Tristate a, const Tristate b) {
     if (a == UNDEFINED || b == UNDEFINED) return UNDEFINED;
-    return a && b;
+    else if (a == TRUE && b == TRUE) return TRUE;
+    else return FALSE;
 }
 
-Trigate nandGate(const Trigate a, const Trigate b) {
-    const Trigate res = and(a, b);
-    return res == UNDEFINED ? res : !res;
+Tristate nandGate(const Tristate a, const Tristate b) {
+    const Tristate res = andGate(a, b);
+    if (res == TRUE) return FALSE;
+    else if (res == FALSE) return TRUE;
+    else return UNDEFINED;
 }
 
-Trigate xorGate(const Trigate a, const Trigate b) {
+Tristate xorGate(const Tristate a, const Tristate b) {
     if (a == UNDEFINED || b == UNDEFINED) return UNDEFINED;
-    return a ^ b;
+    else if (a == TRUE && b == FALSE) return TRUE;
+    else if (a == FALSE && b == TRUE) return TRUE;
+    else if (a == TRUE && b == TRUE) return FALSE;
+    else return FALSE;
 }
 
-Trigate orGate(const Trigate a, const Trigate b) {
+Tristate orGate(const Tristate a, const Tristate b) {
     if (a == UNDEFINED || b == UNDEFINED) return UNDEFINED;
-    return a | b;
+    if (a == TRUE || b == TRUE) return TRUE;
+    else return FALSE;
 }
 
 }  // namespace nts

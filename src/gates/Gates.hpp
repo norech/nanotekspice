@@ -1,15 +1,15 @@
 #pragma once
 
-#include "../Trigate.hpp"
+#include "../Tristate.hpp"
 
 namespace nts {
 
-    Trigate andGate(const Trigate a, const Trigate b);
+Tristate andGate(const Tristate a, const Tristate b);
 
-    Trigate nandGate(const Trigate a, const Trigate b);
+Tristate nandGate(const Tristate a, const Tristate b);
 
-    Trigate xorGate(const Trigate a, const Trigate b);
+Tristate xorGate(const Tristate a, const Tristate b);
 
-    Trigate orGate(const Trigate a, const Trigate b);
+Tristate orGate(const Tristate a, const Tristate b);
 
-}
+}  // namespace nts
