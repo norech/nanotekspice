@@ -1,14 +1,12 @@
 #include "Circuit.hpp"
 
 namespace nts {
-Chip& Chip::addOutputPin(IComponent *component,
-                        std::size_t pin) {
+Chip& Chip::addOutputPin(IComponent* component, std::size_t pin) {
     _pins[pin] = std::make_unique<OutputPin>(component, pin);
     return *this;
 }
 
-Chip& Chip::addInputPin(IComponent *component,
-                       std::size_t pin) {
+Chip& Chip::addInputPin(IComponent* component, std::size_t pin) {
     _pins[pin] = std::make_unique<InputPin>(component, pin);
     return *this;
 }

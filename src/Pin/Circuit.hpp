@@ -19,8 +19,8 @@ public:
 
     static Circuit* getInstance(void);
 
-    static Chip& addChip(IComponent *component);
+    static Chip& addChip(IComponent* component);
 
-    static Chip& getChip(IComponent *component);
+    static Chip& getChip(IComponent* component);
 };
 }  // namespace nts

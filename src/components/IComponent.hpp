@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "../Tristate.hpp"
 #include "../Pin/Circuit.hpp"
+#include "../Tristate.hpp"
 
 namespace nts {
 
@@ -26,8 +26,7 @@ private:
     const std::string _name;
 
 public:
-    Component4001(std::string const &name) : _name(name)
-    {
+    Component4001(std::string const& name) : _name(name) {
         Circuit::addChip(this)
             .addOutputPin(this, 2)
             .addOutputPin(this, 5)
@@ -46,12 +45,10 @@ public:
 
     void simulate(std::size_t tick) override;
 
-    Tristate compute(std::size_t pin) override
-    {
+    Tristate compute(std::size_t pin) override {
         auto chip = Circuit::getInstance()->getChip(this);
 
-        switch (pin) {
-        }
+        switch (pin) {}
     }
 
     void setLink(std::size_t pin, IComponent& other,

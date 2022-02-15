@@ -9,10 +9,10 @@ Circuit::Circuit(void) {
 
 Circuit *Circuit::getInstance(void) { return Circuit::circuit; }
 
-Chip& Circuit::addChip(IComponent *component) {
+Chip &Circuit::addChip(IComponent *component) {
     Circuit *circuit = Circuit::getInstance();
 
-    for (auto& chip : circuit->_chips) {
+    for (auto &chip : circuit->_chips) {
         if (chip.first.get() == component)
             throw std::runtime_error("Cannot add same component twice");
     }
@@ -24,9 +24,8 @@ Chip& Circuit::addChip(IComponent *component) {
 Chip &Circuit::getChip(IComponent *component) {
     Circuit *circuit = Circuit::getInstance();
 
-    for (auto& chip : circuit->_chips) {
-        if (chip.first.get() == component)
-            return *chip.second;
+    for (auto &chip : circuit->_chips) {
+        if (chip.first.get() == component) return *chip.second;
     }
     throw std::runtime_error("Component not found");
 }

@@ -13,9 +13,9 @@ public:
     Chip(void) = default;
     ~Chip(void) = default;
 
-    Chip& addOutputPin(IComponent *component, std::size_t pin);
+    Chip& addOutputPin(IComponent* component, std::size_t pin);
 
-    Chip& addInputPin(IComponent *component, std::size_t pin);
+    Chip& addInputPin(IComponent* component, std::size_t pin);
 
     void link(std::size_t pin, std::shared_ptr<IComponent>& other,
               std::size_t otherPin);
