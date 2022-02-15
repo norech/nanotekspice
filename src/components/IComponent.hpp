@@ -16,6 +16,7 @@ public:
         std::size_t otherPin)
         = 0;
     virtual void dump() const = 0;
+    virtual PinType getPinType(std::size_t pin) const = 0;
 
 private:
 };
