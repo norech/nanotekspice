@@ -1,4 +1,4 @@
-#include "IComponent.hpp"
+#include "Component.hpp"
 
 namespace nts
 {

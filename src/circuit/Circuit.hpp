@@ -3,11 +3,9 @@
 #include <vector>
 #include <memory>
 
-#include "../components/IComponent.hpp"
+#include "../components/Component.hpp"
 
 namespace nts {
-
-class Component;
 
 class Circuit {
 public:
