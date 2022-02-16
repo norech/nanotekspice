@@ -35,7 +35,9 @@ namespace nts
             case 4:
                 return _pins[4]->update(nts::xorGate(_pins[5]->compute(), _pins[6]->compute()));
             case 10:
-                return _pins[4]->update(nts::xorGate(_pins[5]->compute(), _pins[6]->compute()));
+                return _pins[4]->update(nts::xorGate(_pins[8]->compute(), _pins[9]->compute()));
+            case 11:
+                return _pins[4]->update(nts::xorGate(_pins[12]->compute(), _pins[13]->compute()));
             default:
                 return _pins[pin]->compute();
         }
