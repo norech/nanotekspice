@@ -19,7 +19,7 @@ public:
     Component& addInputPin(std::size_t pin);
 
     void setLink(std::size_t pin, IComponent& other,
-            std::size_t otherPin) override;
+                 std::size_t otherPin) override;
 
     Pin& getPin(std::size_t pin);
 
@@ -28,4 +28,4 @@ public:
 
     const std::string& getName(void) const;
 };
-}
+}  // namespace nts

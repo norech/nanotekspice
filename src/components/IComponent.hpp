@@ -19,4 +19,4 @@ public:
     virtual PinType getPinType(std::size_t pin) const = 0;
 };
 
-} // namespace nts
+}  // namespace nts

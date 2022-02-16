@@ -5,8 +5,7 @@ bool Pin::otherIsSelf(const IComponent *other) const {
     return other == _component;
 }
 
-bool Pin::isLinkedTo(const IComponent *other,
-                     std::size_t pin) const {
+bool Pin::isLinkedTo(const IComponent *other, std::size_t pin) const {
     for (const auto it : _links) {
         if (it.first == other && it.second == pin) {
             return true;
@@ -25,13 +24,11 @@ OutputPin::OutputPin(IComponent *component, std::size_t pin)
 InputPin::InputPin(IComponent *component, std::size_t pin)
     : Pin(component, pin, PinType::INPUT) {}
 
-void InputPin::setLink(IComponent *other,
-                       std::size_t otherPin) {
+void InputPin::setLink(IComponent *other, std::size_t otherPin) {
     _links.push_back(std::make_pair(other, otherPin));
 }
 
-void OutputPin::setLink(IComponent *other,
-                        std::size_t otherPin) {
+void OutputPin::setLink(IComponent *other, std::size_t otherPin) {
     (void)other;
     (void)otherPin;
     throw std::runtime_error("Cannot link output");

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "../components/Component.hpp"
 
@@ -20,7 +20,8 @@ public:
 
     static Circuit* getInstance(void);
 
-    static Component* addComponent(const std::string& type, const std::string& name);
+    static Component* addComponent(const std::string& type,
+                                   const std::string& name);
 
     static Component* getFromName(const std::string& name);
 };
