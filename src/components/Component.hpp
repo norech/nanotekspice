@@ -1,7 +1,7 @@
 #pragma once
 
-#include "IComponent.hpp"
 #include "../gates/Gates.hpp"
+#include "IComponent.hpp"
 
 namespace nts {
 class Component : virtual public IComponent {
@@ -32,16 +32,6 @@ public:
 
     const std::string& getName(void) const;
 };
-
-class Component4001 : public Component {
-public:
-    Component4001(const std::string& name);
-    ~Component4001(void) override = default;
-
-    void reset(void) override;
-    Tristate compute(std::size_t pin) override;
-    void simulate(std::size_t tick) override;
-
-};
+;
 
 }  // namespace nts

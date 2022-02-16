@@ -17,7 +17,6 @@ public:
                          std::size_t otherPin) = 0;
     virtual void dump() const = 0;
     virtual std::size_t getTick() const = 0;
-    virtual void reset() = 0;
 };
 
 }  // namespace nts

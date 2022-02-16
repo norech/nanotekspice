@@ -33,16 +33,15 @@ public:
 
     PinType getType(void) const;
     Tristate getState(void) const;
-    Pin& setState(Tristate state);
+    Pin &setState(Tristate state);
 
     bool isVisited(void) const;
-    Pin& visit(void);
-    Pin& unvisit(void);
+    Pin &visit(void);
+    Pin &unvisit(void);
 
     virtual Tristate compute(void) = 0;
 
     Tristate update(Tristate state);
-
 };
 
 class InputPin : public Pin {
