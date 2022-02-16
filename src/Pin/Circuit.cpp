@@ -9,14 +9,14 @@ Circuit::Circuit(void) {
 
 Circuit *Circuit::getInstance(void) { return Circuit::circuit; }
 
-Chip &Circuit::addChip(IComponent *component) {
+IComponent *Circuit::addChip(IComponent *component) {
     Circuit *circuit = Circuit::getInstance();
 
-    for (auto &chip : circuit->_chips) {
+    for (auto &chip : circuit->_components) {
         if (chip.first.get() == component)
             throw std::runtime_error("Cannot add same component twice");
     }
-    auto sp = std::make_shared<IComponent>(component);
+    auto sp = std::make_unique<IComponent>(component);
     circuit->_chips[sp] = std::make_shared<Chip>();
     return *circuit->_chips[sp];
 }
@@ -29,4 +29,6 @@ Chip &Circuit::getChip(IComponent *component) {
     }
     throw std::runtime_error("Component not found");
 }
+
+
 }  // namespace nts

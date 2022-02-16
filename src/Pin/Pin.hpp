@@ -2,32 +2,33 @@
 
 #include <functional>
 #include <memory>
-
-#include "../components/IComponent.hpp"
+#include "../Tristate.hpp"
 
 namespace nts {
+
+class IComponent;
+
 class Pin {
 public:
-    using Link = std::pair<std::shared_ptr<IComponent>, std::size_t>;
+    using Link = std::pair<IComponent *, std::size_t>;
 
 protected:
-    std::shared_ptr<IComponent> _component;
+    IComponent *_component;
     std::size_t _pin;
     std::vector<Link> _links;
     PinType _type;
 
 public:
-    Pin(std::shared_ptr<IComponent> &component, std::size_t pin, PinType type);
+    Pin(IComponent *component, std::size_t pin, PinType type);
     virtual ~Pin() = default;
 
     Pin(const Pin &) = delete;
 
-    virtual void setLink(const std::shared_ptr<IComponent> &other,
+    virtual void setLink(IComponent *other,
                          std::size_t otherPin) = 0;
-    virtual Tristate compute() = 0;
 
-    bool otherIsSelf(const std::shared_ptr<IComponent> &other) const;
-    bool isLinkedTo(const std::shared_ptr<IComponent> &other,
+    bool otherIsSelf(const IComponent *other) const;
+    bool isLinkedTo(const IComponent *other,
                     std::size_t pin) const;
 
     PinType getType(void) const;
@@ -35,15 +36,15 @@ public:
 
 class InputPin : public Pin {
 public:
-    InputPin(std::shared_ptr<IComponent> &component, std::size_t pin);
-    void setLink(const std::shared_ptr<IComponent> &other,
+    InputPin(IComponent *component, std::size_t pin);
+    void setLink(IComponent *other,
                  std::size_t otherPin) override;
 };
 
 class OutputPin : public Pin {
 public:
-    OutputPin(std::shared_ptr<IComponent> &component, std::size_t pin);
-    void setLink(const std::shared_ptr<IComponent> &other,
+    OutputPin(IComponent *component, std::size_t pin);
+    void setLink(IComponent *other,
                  std::size_t otherPin) override;
 };
 }  // namespace nts
