@@ -16,7 +16,8 @@ public:
     virtual void setLink(std::size_t pin, IComponent& other,
                          std::size_t otherPin) = 0;
     virtual void dump() const = 0;
-    virtual PinType getPinType(std::size_t pin) const = 0;
+    virtual std::size_t getTick() const = 0;
+    virtual void reset() = 0;
 };
 
 }  // namespace nts

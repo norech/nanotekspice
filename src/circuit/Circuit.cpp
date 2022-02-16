@@ -30,4 +30,32 @@ Component* Circuit::addComponent(const std::string& type,
     throw std::runtime_error("No component can be added yet");
 }
 
+void Circuit::unvisit(void) {
+    Circuit* circuit = Circuit::getInstance();
+
+    for (auto& it : circuit->_components) {
+        for (auto& pin : it->getPins()) {
+            pin.second->unvisit();
+        }
+    }
+}
+
+void Circuit::reset(void) {
+    Circuit* circuit = Circuit::getInstance();
+
+    for (auto& it : circuit->_components) {
+        it->reset();
+    }
+}
+
+void Circuit::simulate(void) {
+    Circuit* circuit = Circuit::getInstance();
+    Circuit::unvisit();
+    circuit->_tick++;
+    for (auto& it : circuit->_components) {
+        it->simulate(tick);
+    }
+}
+
+std::size_t Circuit::getTick(void) const { return _tick; }
 }  // namespace nts

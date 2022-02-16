@@ -25,6 +25,8 @@ const Component::PinMap& Component::getPins(void) const { return _pins; }
 
 Component::PinMap& Component::getPins(void) { return _pins; }
 
+std::size_t Component::getTick(void) const { return _tick; }
+
 Component::Component(const std::string& name) : _name(name) {}
 
 const std::string& Component::getName(void) const { return _name; }

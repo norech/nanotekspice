@@ -13,6 +13,7 @@ public:
 
 private:
     std::vector<std::unique_ptr<Component>> _components;
+    std::size_t _tick;
 
 public:
     Circuit(void);
@@ -24,5 +25,12 @@ public:
                                    const std::string& name);
 
     static Component* getFromName(const std::string& name);
+
+    static void unvisit(void);
+    static void reset(void);
+    static void simulate(void);
+
+    std::size_t getTick(void) const;
 };
+
 }  // namespace nts

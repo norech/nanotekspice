@@ -31,10 +31,10 @@ Tristate xorGate(const Tristate a, const Tristate b) {
 }
 
 Tristate orGate(const Tristate a, const Tristate b) {
-    if (a == UNDEFINED || b == UNDEFINED)
-        return UNDEFINED;
-    else if (a == TRUE || b == TRUE)
+    if (a == TRUE || b == TRUE)
         return TRUE;
+    else if (a == UNDEFINED || b == UNDEFINED)
+        return UNDEFINED;
     else
         return FALSE;
 }

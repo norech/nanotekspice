@@ -18,6 +18,8 @@ protected:
     std::size_t _pin;
     std::vector<Link> _links;
     PinType _type;
+    bool _visited = false;
+    Tristate _state = Tristate::UNDEFINED;
 
 public:
     Pin(IComponent *component, std::size_t pin, PinType type);
@@ -25,23 +27,33 @@ public:
 
     Pin(const Pin &) = delete;
 
-    virtual void setLink(IComponent *other, std::size_t otherPin) = 0;
-
     bool otherIsSelf(const IComponent *other) const;
     bool isLinkedTo(const IComponent *other, std::size_t pin) const;
+    void setLink(IComponent *other, std::size_t otherPin);
 
     PinType getType(void) const;
+    Tristate getState(void) const;
+    Pin& setState(Tristate state);
+
+    bool isVisited(void) const;
+    Pin& visit(void);
+    Pin& unvisit(void);
+
+    virtual Tristate compute(void) = 0;
+
+    Tristate update(Tristate state);
+
 };
 
 class InputPin : public Pin {
 public:
     InputPin(IComponent *component, std::size_t pin);
-    void setLink(IComponent *other, std::size_t otherPin) override;
+    Tristate compute(void) override;
 };
 
 class OutputPin : public Pin {
 public:
     OutputPin(IComponent *component, std::size_t pin);
-    void setLink(IComponent *other, std::size_t otherPin) override;
+    Tristate compute(void) override;
 };
 }  // namespace nts
