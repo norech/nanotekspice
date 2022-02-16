@@ -30,4 +30,10 @@ std::size_t Component::getTick(void) const { return _tick; }
 Component::Component(const std::string& name) : _name(name) {}
 
 const std::string& Component::getName(void) const { return _name; }
+
+void Component::simulate(std::size_t tick) {
+    for (auto& it : _pins) {
+        it.second->compute();
+    }
+}
 }  // namespace nts

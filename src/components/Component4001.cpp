@@ -1,6 +1,7 @@
 #include "Component.hpp"
 
 namespace nts {
+
 Component4001::Component4001(const std::string& name) : Component(name) {
     addInputPin(1);
     addInputPin(2);
@@ -35,10 +36,6 @@ Tristate Component4001::compute(std::size_t pin) {
     }
 }
 
-void Component4001::simulate(std::size_t tick) {
-    for (auto& it : _pins) {
-        it.second->compute();
-    }
-}
+
 
 }  // namespace nts

@@ -39,4 +39,13 @@ Tristate orGate(const Tristate a, const Tristate b) {
         return FALSE;
 }
 
+Tristate notGate(const Tristate a) {
+    if (a == UNDEFINED)
+        return UNDEFINED;
+    else if (a == TRUE)
+        return FALSE;
+    else
+        return TRUE;
+}
+
 }  // namespace nts
