@@ -9,7 +9,7 @@ namespace nts {
 
 class Circuit {
 public:
-    static Circuit* circuit;
+    static std::unique_ptr<Circuit> circuit;
 
 private:
     std::vector<std::unique_ptr<Component>> _components;
@@ -19,7 +19,7 @@ public:
     Circuit(void);
     ~Circuit(void) = default;
 
-    static Circuit* getInstance(void);
+    static Circuit& getInstance(void);
 
     static Component* addComponent(const std::string& type,
                                    const std::string& name);
@@ -27,7 +27,6 @@ public:
     static Component* getFromName(const std::string& name);
 
     static void unvisit(void);
-    static void reset(void);
     static void simulate(void);
 
     std::size_t getTick(void) const;

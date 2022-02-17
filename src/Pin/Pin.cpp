@@ -3,13 +3,13 @@
 #include "../components/Component.hpp"
 
 namespace nts {
-bool Pin::otherIsSelf(const IComponent *other) const {
-    return other == _component;
+bool Pin::otherIsSelf(const Component &other) const {
+    return &other == &_component.get();
 }
 
-bool Pin::isLinkedTo(const IComponent *other, std::size_t pin) const {
+bool Pin::isLinkedTo(const Component &other, std::size_t pin) const {
     for (const auto it : _links) {
-        if (it.first == other && it.second == pin) {
+        if (&it.first.get() == &other && it.second == pin) {
             return true;
         }
     }
@@ -33,33 +33,34 @@ Pin &Pin::unvisit(void) {
     return *this;
 }
 
-Tristate InputPin::compute(void) {
+Tristate Pin::compute(void) {
     if (isVisited()) return _state;
     visit();
     for (auto &it : _links) {
-        it.first->simulate(_component->getTick());
-        _state = orGate(_state, it.first->compute(it.second));
+        if (&it.first.get() != &_component.get()) {
+            it.first.get().simulate(_component.get().getTick());
+        }
+        _state = orGate(_state, it.first.get().compute(it.second));
     }
     return _state;
 }
-
-Tristate OutputPin::compute(void) { return _component->compute(_pin); }
 
 Tristate Pin::update(Tristate state) {
     setState(state);
     return getState();
 }
 
-Pin::Pin(IComponent *component, std::size_t pin, PinType type)
+Pin::Pin(Component &component, std::size_t pin, PinType type)
     : _component(component), _pin(pin), _type(type) {}
 
-OutputPin::OutputPin(IComponent *component, std::size_t pin)
+OutputPin::OutputPin(Component &component, std::size_t pin)
     : Pin(component, pin, PinType::OUTPUT) {}
-InputPin::InputPin(IComponent *component, std::size_t pin)
+InputPin::InputPin(Component &component, std::size_t pin)
     : Pin(component, pin, PinType::INPUT) {}
 
-void Pin::setLink(IComponent *other, std::size_t otherPin) {
-    _links.push_back(std::make_pair(other, otherPin));
+void Pin::setLink(Component &other, std::size_t otherPin) {
+    _links.push_back(
+        std::make_pair(std::reference_wrapper<Component>(other), otherPin));
 }
 
 }  // namespace nts

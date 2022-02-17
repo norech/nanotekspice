@@ -7,14 +7,14 @@
 
 namespace nts {
 
-class IComponent;
+class Component;
 
 class Pin {
 public:
-    using Link = std::pair<IComponent *, std::size_t>;
+    using Link = std::pair<std::reference_wrapper<Component>, std::size_t>;
 
 protected:
-    IComponent *_component;
+    std::reference_wrapper<Component> _component;
     std::size_t _pin;
     std::vector<Link> _links;
     PinType _type;
@@ -22,14 +22,14 @@ protected:
     Tristate _state = Tristate::UNDEFINED;
 
 public:
-    Pin(IComponent *component, std::size_t pin, PinType type);
+    Pin(Component &component, std::size_t pin, PinType type);
     virtual ~Pin() = default;
 
     Pin(const Pin &) = delete;
 
-    bool otherIsSelf(const IComponent *other) const;
-    bool isLinkedTo(const IComponent *other, std::size_t pin) const;
-    void setLink(IComponent *other, std::size_t otherPin);
+    bool otherIsSelf(const Component &other) const;
+    bool isLinkedTo(const Component &other, std::size_t pin) const;
+    void setLink(Component &other, std::size_t otherPin);
 
     PinType getType(void) const;
     Tristate getState(void) const;
@@ -39,20 +39,18 @@ public:
     Pin &visit(void);
     Pin &unvisit(void);
 
-    virtual Tristate compute(void) = 0;
+    virtual Tristate compute(void);
 
     Tristate update(Tristate state);
 };
 
 class InputPin : public Pin {
 public:
-    InputPin(IComponent *component, std::size_t pin);
-    Tristate compute(void) override;
+    InputPin(Component &component, std::size_t pin);
 };
 
 class OutputPin : public Pin {
 public:
-    OutputPin(IComponent *component, std::size_t pin);
-    Tristate compute(void) override;
+    OutputPin(Component &component, std::size_t pin);
 };
 }  // namespace nts

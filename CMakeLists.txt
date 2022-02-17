@@ -4,11 +4,10 @@ project(NanoTekSpice)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(SRC
-    src/main.cpp
-    src/components/ClockComponent.cpp
-    src/components/InputComponent.cpp
-    src/ComponentManager.cpp
+file(GLOB_RECURSE SRC
+    main.cpp
+    src/*.cpp
+    src/**/*.cpp
 )
 
 include_directories(

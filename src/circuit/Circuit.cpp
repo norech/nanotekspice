@@ -1,19 +1,22 @@
 #include "../circuit/Circuit.hpp"
 
+#include <memory>
+
 namespace nts {
 
-Circuit* Circuit::circuit = nullptr;
+std::unique_ptr<Circuit> Circuit::circuit = nullptr;
 
-Circuit::Circuit(void) {
-    if (circuit == nullptr) circuit = this;
+Circuit::Circuit(void) {}
+
+Circuit& Circuit::getInstance(void) {
+    if (Circuit::circuit == nullptr) circuit = std::make_unique<Circuit>();
+    return *Circuit::circuit;
 }
 
-Circuit* Circuit::getInstance(void) { return Circuit::circuit; }
-
 Component* Circuit::getFromName(const std::string& name) {
-    Circuit* circuit = Circuit::getInstance();
+    Circuit& circuit = Circuit::getInstance();
 
-    for (auto& it : circuit->_components) {
+    for (auto& it : circuit._components) {
         if (it->getName() == name) return it.get();
     }
     return nullptr;
@@ -21,9 +24,9 @@ Component* Circuit::getFromName(const std::string& name) {
 
 Component* Circuit::addComponent(const std::string& type,
                                  const std::string& name) {
-    Circuit* circuit = Circuit::getInstance();
+    Circuit& circuit = Circuit::getInstance();
 
-    if (circuit->getFromName(name) != nullptr) {
+    if (circuit.getFromName(name) != nullptr) {
         throw std::runtime_error(
             "Cannot add twice a component with the same name");
     }
@@ -31,29 +34,21 @@ Component* Circuit::addComponent(const std::string& type,
 }
 
 void Circuit::unvisit(void) {
-    Circuit* circuit = Circuit::getInstance();
+    Circuit& circuit = Circuit::getInstance();
 
-    for (auto& it : circuit->_components) {
+    for (auto& it : circuit._components) {
         for (auto& pin : it->getPins()) {
             pin.second->unvisit();
         }
     }
 }
 
-void Circuit::reset(void) {
-    Circuit* circuit = Circuit::getInstance();
-
-    for (auto& it : circuit->_components) {
-        it->reset();
-    }
-}
-
 void Circuit::simulate(void) {
-    Circuit* circuit = Circuit::getInstance();
+    Circuit& circuit = Circuit::getInstance();
     Circuit::unvisit();
-    circuit->_tick++;
-    for (auto& it : circuit->_components) {
-        it->simulate(tick);
+    circuit._tick++;
+    for (auto& it : circuit._components) {
+        it->simulate(circuit._tick);
     }
 }
 

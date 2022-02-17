@@ -3,19 +3,20 @@
 namespace nts {
 
 Component& Component::addOutputPin(std::size_t pin) {
-    _pins[pin] = std::make_unique<OutputPin>(this, pin);
+    _pins[pin] = std::make_unique<OutputPin>(*this, pin);
     return *this;
 }
 
 Component& Component::addInputPin(std::size_t pin) {
-    _pins[pin] = std::make_unique<InputPin>(this, pin);
+    _pins[pin] = std::make_unique<InputPin>(*this, pin);
     return *this;
 }
 
-void Component::setLink(std::size_t pin, IComponent& other,
+void Component::setLink(std::size_t pin, IComponent& otherI,
                         std::size_t otherPin) {
-    if (_pins[pin]->isLinkedTo(&other, otherPin)) return;
-    _pins[pin]->setLink(&other, otherPin);
+    Component& other = dynamic_cast<Component&>(otherI);
+    if (_pins[pin]->isLinkedTo(other, otherPin)) return;
+    _pins[pin]->setLink(other, otherPin);
     other.setLink(otherPin, *this, pin);
 }
 
