@@ -48,4 +48,27 @@ Tristate notGate(const Tristate a) {
         return TRUE;
 }
 
+Tristate addGate(const Tristate a, const Tristate b, Tristate &carry) {
+    if (a == UNDEFINED || b == UNDEFINED) {
+        carry = UNDEFINED;
+        return UNDEFINED;
+    }  else if (a == TRUE || b == TRUE) {
+        if (a == FALSE || b == FALSE) {
+            carry = FALSE;
+            return TRUE;
+        } else {
+            carry = TRUE;
+            return TRUE;
+        }
+    } else {
+        carry = FALSE;
+        return FALSE;
+    }
+}
+
+Tristate addGate(const Tristate a, const Tristate b) {
+    Tristate tmp;
+    return addGate(a, b, tmp);
+}
+
 }  // namespace nts

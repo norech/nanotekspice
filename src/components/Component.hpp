@@ -59,4 +59,10 @@ public:
     Tristate compute(std::size_t pin) override;
 };
 
+class Component4008 : public Component {
+public:
+    Component4008(const std::string& name);
+    Tristate compute(std::size_t pin) override;
+};
+
 }  // namespace nts

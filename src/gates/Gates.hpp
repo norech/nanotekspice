@@ -14,4 +14,6 @@ Tristate orGate(const Tristate a, const Tristate b);
 
 Tristate notGate(const Tristate a);
 
+Tristate addGate(const Tristate a, const Tristate b, Tristate *carry);
+
 }  // namespace nts
