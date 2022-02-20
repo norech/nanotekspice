@@ -14,7 +14,7 @@ protected:
     std::size_t _tick = 0;
 
 public:
-    Component(const std::string& name);
+    Component(const std::string& name="Undefined");
     ~Component(void) override = default;
 
     Component& addInputPin(std::size_t pin);
@@ -33,35 +33,9 @@ public:
     const std::string& getName(void) const;
 
     void simulate(std::size_t tick) override;
-};
 
-class Component4001 : public Component {
-public:
-    Component4001(const std::string& name);
-    Tristate compute(std::size_t pin) override;
-};
+    void dump(void) const override;
 
-class Component4030 : public Component {
-public:
-    Component4030(const std::string& name);
-    Tristate compute(std::size_t pin) override;
-};
-
-class Component4069 : public Component {
-public:
-    Component4069(const std::string& name);
-    Tristate compute(std::size_t pin) override;
-};
-
-class Component4081 : public Component {
-public:
-    Component4081(const std::string& name);
-    Tristate compute(std::size_t pin) override;
-};
-
-class Component4008 : public Component {
-public:
-    Component4008(const std::string& name);
     Tristate compute(std::size_t pin) override;
 };
 

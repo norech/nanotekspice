@@ -6,7 +6,8 @@ namespace nts {
 
 std::unique_ptr<Circuit> Circuit::circuit = nullptr;
 
-Circuit::Circuit(void) {}
+Circuit::Circuit(void) {
+}
 
 Circuit& Circuit::getInstance(void) {
     if (Circuit::circuit == nullptr) circuit = std::make_unique<Circuit>();

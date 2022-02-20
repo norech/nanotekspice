@@ -15,8 +15,10 @@ private:
     std::vector<std::unique_ptr<Component>> _components;
     std::size_t _tick;
 
-public:
+protected:
     Circuit(void);
+
+public:
     ~Circuit(void) = default;
 
     static Circuit& getInstance(void);

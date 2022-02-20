@@ -37,4 +37,9 @@ void Component::simulate(std::size_t tick) {
         it.second->compute();
     }
 }
+
+void Component::dump(void) const { throw std::runtime_error("Dump not implemented"); }
+
+Tristate Component::compute(std::size_t pin) { return _pins[pin]->compute(); }
+
 }  // namespace nts

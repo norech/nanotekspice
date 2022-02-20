@@ -2,21 +2,16 @@
 
 namespace nts {
 Tristate andGate(const Tristate a, const Tristate b) {
-    if (a == UNDEFINED || b == UNDEFINED)
-        return UNDEFINED;
+    if (a == FALSE || b == FALSE)
+        return FALSE;
     else if (a == TRUE && b == TRUE)
         return TRUE;
     else
-        return FALSE;
+        return UNDEFINED;
 }
 
 Tristate nandGate(const Tristate a, const Tristate b) {
-    if (a == UNDEFINED || b == UNDEFINED)
-        return UNDEFINED;
-    else if (a == TRUE && b == TRUE)
-        return FALSE;
-    else
-        return TRUE;
+    return notGate(andGate(a, b));
 }
 
 Tristate xorGate(const Tristate a, const Tristate b) {
@@ -46,29 +41,6 @@ Tristate notGate(const Tristate a) {
         return FALSE;
     else
         return TRUE;
-}
-
-Tristate addGate(const Tristate a, const Tristate b, Tristate &carry) {
-    if (a == UNDEFINED || b == UNDEFINED) {
-        carry = UNDEFINED;
-        return UNDEFINED;
-    }  else if (a == TRUE || b == TRUE) {
-        if (a == FALSE || b == FALSE) {
-            carry = FALSE;
-            return TRUE;
-        } else {
-            carry = TRUE;
-            return TRUE;
-        }
-    } else {
-        carry = FALSE;
-        return FALSE;
-    }
-}
-
-Tristate addGate(const Tristate a, const Tristate b) {
-    Tristate tmp;
-    return addGate(a, b, tmp);
 }
 
 }  // namespace nts
