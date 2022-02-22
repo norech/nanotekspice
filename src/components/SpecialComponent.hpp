@@ -16,6 +16,7 @@ public:
 class Input : public SpecialComponent {
 public:
     Input(const std::string& name);
+    void setValue(Tristate value);
 };
 
 class Clock : public Input {

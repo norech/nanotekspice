@@ -6,8 +6,7 @@ namespace nts {
 
 std::unique_ptr<Circuit> Circuit::circuit = nullptr;
 
-Circuit::Circuit(void) {
-}
+Circuit::Circuit(void) {}
 
 Circuit& Circuit::getInstance(void) {
     if (Circuit::circuit == nullptr) circuit = std::make_unique<Circuit>();
@@ -51,6 +50,20 @@ void Circuit::simulate(void) {
     for (auto& it : circuit._components) {
         it->simulate(circuit._tick);
     }
+}
+
+void Circuit::dump(void) {
+    Circuit& circuit = Circuit::getInstance();
+
+    for (auto& it : circuit._components) {
+        it->dump();
+    }
+}
+
+void Circuit::display(void) {
+    Circuit& circuit = Circuit::getInstance();
+
+    throw std::runtime_error("Display not implemented");
 }
 
 std::size_t Circuit::getTick(void) const { return _tick; }

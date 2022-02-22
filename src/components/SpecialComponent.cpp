@@ -16,6 +16,8 @@ Input::Input(const std::string& name) : SpecialComponent(name) {
     addOutputPin(1);
 }
 
+void Input::setValue(Tristate value) { _pins[1]->setState(value); }
+
 Clock::Clock(const std::string& name) : Input(name) {}
 
 void Clock::simulate(std::size_t tick) {

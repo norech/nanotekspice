@@ -29,6 +29,8 @@ public:
 
     static void unvisit(void);
     static void simulate(void);
+    static void dump(void);
+    static void display(void);
 
     std::size_t getTick(void) const;
 };
