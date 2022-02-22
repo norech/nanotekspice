@@ -16,9 +16,8 @@ private:
     std::size_t _tick;
 
 protected:
-    Circuit(void);
-
 public:
+    Circuit(void);
     ~Circuit(void) = default;
 
     static Circuit& getInstance(void);
