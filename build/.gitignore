@@ -2,3 +2,8 @@ CMake*
 cmake*
 nanotekspice
 Makefile
+build*
+.ninja*
+compile_commands.json
+rules.ninja
+.cmake
