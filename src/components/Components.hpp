@@ -4,6 +4,8 @@
 #include <vector>
 
 namespace nts {
+
+/*
 class HalfAdder : public Component {
 private:
     std::unique_ptr<Xor> _output = std::make_unique<Xor>();
@@ -99,6 +101,16 @@ public:
             this->setLink(links[i][2], *_adders[i], 4);
         }
     }
+};
+*/
+
+class Component4001 : public Component {
+public:
+    std::array<std::unique_ptr<Nor>, 4> _nors = {
+        std::make_unique<Nor>(), std::make_unique<Nor>(),
+        std::make_unique<Nor>(), std::make_unique<Nor>()
+    };
+    Component4001(const std::string& name="4001");
 };
 
 }  // namespace nts

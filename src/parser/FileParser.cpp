@@ -43,7 +43,7 @@ void FileParser::parseChipsets() {
         std::string type;
         std::string name;
         ss >> type >> name;
-        // Circuit::addComponent(type, name);
+        Circuit::addComponent(type, name);
         std::cerr << "Chipset: " << type << ", name: " << name << std::endl;
     }
 }

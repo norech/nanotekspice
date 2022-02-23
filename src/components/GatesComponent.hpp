@@ -4,7 +4,7 @@ namespace nts {
 
     class Gate : public Component {
     protected:
-        Gate(void) = default;
+        Gate(void) : Component("InternalUndefinedGate") {}
     };
 
     class DualInputGate : public Gate {
@@ -26,7 +26,7 @@ namespace nts {
             }
             return _pins[pin]->compute();
         }
- 
+
     };
 
     class And : public DualInputGate {
@@ -63,5 +63,21 @@ namespace nts {
             return _pins[pin]->compute();
         }
 
+    };
+
+    class Nor : public Gate {
+    private:
+        std::unique_ptr<Or> _or = std::make_unique<Or>();
+        std::unique_ptr<Not> _not = std::make_unique<Not>();
+
+    public:
+        Nor(const std::string& name="Nor")
+        {
+            addInputPin(1).addInputPin(2).addOutputPin(3);
+            this->setLink(1, *_or, 1);
+            this->setLink(2, *_or, 2);
+            _or->setLink(3, *_not, 1);
+            _not->setLink(2, *this, 3);
+        }
     };
 }

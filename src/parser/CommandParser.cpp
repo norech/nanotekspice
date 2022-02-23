@@ -33,15 +33,11 @@ bool CommandParser::parseAssignation(const std::string& cmd) {
     }
     std::string name = cmd.substr(0, cmd.find("="));
     std::string value = cmd.substr(cmd.find("=") + 1);
-    Component* comp = Circuit::getFromName(name);
-    if (comp == nullptr) {
-        throw std::runtime_error("No component named " + name);
-    }
-    if (dynamic_cast<Input*>(comp) != nullptr) {
-        Input* input = dynamic_cast<Input*>(comp);
+    Component& comp = Circuit::getFromName(name);
+    Input *input = dynamic_cast<Input *>(&comp);
+    if (input != nullptr) {
         input->setValue(parseTristate(value));
-    }
-    else {
+    } else {
         throw std::runtime_error("Cannot set value on a non-input component");
     }
     return true;

@@ -39,4 +39,6 @@ public:
     Tristate compute(std::size_t pin) override;
 };
 
+
+
 }  // namespace nts

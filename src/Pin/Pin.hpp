@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <memory>
+#include <list>
 
 #include "../Tristate.hpp"
 
@@ -11,12 +12,12 @@ class Component;
 
 class Pin {
 public:
-    using Link = std::pair<std::reference_wrapper<Component>, std::size_t>;
+    using Link = std::pair<Component&, std::size_t>;
 
 protected:
-    std::reference_wrapper<Component> _component;
+    Component& _component;
     std::size_t _pin;
-    std::vector<Link> _links;
+    std::list<Link> _links;
     PinType _type;
     bool _visited = false;
     Tristate _state = Tristate::UNDEFINED;

@@ -1,15 +1,16 @@
 #include "Pin.hpp"
+#include <iostream>
 
 #include "../components/Component.hpp"
 
 namespace nts {
 bool Pin::otherIsSelf(const Component &other) const {
-    return &other == &_component.get();
+    return &other == &_component;
 }
 
 bool Pin::isLinkedTo(const Component &other, std::size_t pin) const {
     for (const auto it : _links) {
-        if (&it.first.get() == &other && it.second == pin) {
+        if (&it.first == &other && it.second == pin) {
             return true;
         }
     }
@@ -34,14 +35,18 @@ Pin &Pin::unvisit(void) {
 }
 
 Tristate Pin::compute(void) {
-    if (isVisited()) return _state;
-    visit();
-    for (auto &it : _links) {
-        if (&it.first.get() != &_component.get()) {
-            it.first.get().simulate(_component.get().getTick());
-        }
-        _state = orGate(_state, it.first.get().compute(it.second));
+    std::cout << "B: " << _component.getName() << " -> " << _state << std::endl;
+    if (isVisited()) {
+        std::cout << "A: " << _component.getName() << " -> " << _state << std::endl;
+        return _state;
     }
+    visit();
+    std::cout << _links.size() << std::endl;
+    for (auto &it : _links) {
+        std::cout << "\tComputing " << it.first.getName() << std::endl;
+        _state = orGate(_state, it.first.compute(it.second));
+    }
+    std::cout << "C: " << _component.getName() << " -> " << _state << std::endl;
     return _state;
 }
 
@@ -60,7 +65,8 @@ InputPin::InputPin(Component &component, std::size_t pin)
 
 void Pin::setLink(Component &other, std::size_t otherPin) {
     _links.push_back(
-        std::make_pair(std::reference_wrapper<Component>(other), otherPin));
+        {other, otherPin}
+    );
 }
 
 }  // namespace nts

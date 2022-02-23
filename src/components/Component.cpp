@@ -1,4 +1,5 @@
 #include "Component.hpp"
+#include <iostream>
 
 namespace nts {
 
@@ -15,7 +16,15 @@ Component& Component::addInputPin(std::size_t pin) {
 void Component::setLink(std::size_t pin, IComponent& otherI,
                         std::size_t otherPin) {
     Component& other = dynamic_cast<Component&>(otherI);
+
     if (_pins[pin]->isLinkedTo(other, otherPin)) return;
+
+    auto it = _pins.find(pin);
+    if (it == _pins.end())
+        throw std::runtime_error(
+            std::string("Could not find pin: ") +
+                std::to_string(pin)
+        );
     _pins[pin]->setLink(other, otherPin);
     other.setLink(otherPin, *this, pin);
 }
@@ -38,7 +47,12 @@ void Component::simulate(std::size_t tick) {
     }
 }
 
-void Component::dump(void) const { throw std::runtime_error("Dump not implemented"); }
+void Component::dump(void) const {
+    std::cout << "Dump: " << _name << std::endl;
+    for (const auto& it : _pins) {
+        std::cout << "pin" << std::to_string(it.first) << ": " << (int)it.second->getState() << std::endl;
+    }
+}
 
 Tristate Component::compute(std::size_t pin) { return _pins[pin]->compute(); }
 

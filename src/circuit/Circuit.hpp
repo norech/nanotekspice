@@ -1,9 +1,9 @@
 #pragma once
 
 #include <memory>
-#include <vector>
+#include <map>
 
-#include "../components/Component.hpp"
+#include "../components/Components.hpp"
 
 namespace nts {
 
@@ -12,8 +12,13 @@ public:
     static std::unique_ptr<Circuit> circuit;
 
 private:
-    std::vector<std::unique_ptr<Component>> _components;
+    std::map<std::string, std::unique_ptr<Component>> _components;
     std::size_t _tick;
+
+    std::unordered_map<
+        std::string,
+        std::function<std::unique_ptr<Component>(const std::string&)>
+    > _factory = {}; 
 
 protected:
 public:
@@ -22,10 +27,14 @@ public:
 
     static Circuit& getInstance(void);
 
-    static Component* addComponent(const std::string& type,
+    static void addComponent(const std::string& type,
                                    const std::string& name);
 
-    static Component* getFromName(const std::string& name);
+    static Component& getFromName(const std::string& name);
+    void setLink(const std::string& leftComponent, std::size_t pinLeft,
+        const std::string& rightComponent, std::size_t left);
+    
+    static bool alreadyHasName(const std::string& name);
 
     static void unvisit(void);
     static void simulate(void);
