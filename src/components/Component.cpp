@@ -44,10 +44,8 @@ Component::Component(const std::string& name) : _name(name) {}
 const std::string& Component::getName(void) const { return _name; }
 
 void Component::simulate(std::size_t tick) {
-    Circuit::unvisit();
     for (auto& it : _pins) {
         it.second->compute();
-        Circuit::unvisit();
     }
 }
 

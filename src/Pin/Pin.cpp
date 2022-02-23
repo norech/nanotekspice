@@ -33,12 +33,10 @@ Pin &Pin::unvisit(void) {
     if (_visited == false) return *this;
     _visited = false;
     for (auto& it : this->_component.getPins())
-        if (it.second->isVisited() == true)
-            it.second->unvisit();
+        it.second->unvisit();
     for (auto& it : _links)
         for (auto& it2 : it->first.getPins())
-            if (it2.second->isVisited() == true)
-                it2.second->unvisit();
+            it2.second->unvisit();
     return *this;
 }
 

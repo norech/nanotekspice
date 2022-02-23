@@ -89,7 +89,6 @@ void Circuit::simulate(void) {
     circuit._tick++;
     for (auto& it : circuit._components) {
         it.second->simulate(circuit._tick);
-        Circuit::unvisit();
     }
 }
 
