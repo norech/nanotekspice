@@ -37,6 +37,8 @@ public:
     void dump(void) const override;
 
     Tristate compute(std::size_t pin) override;
+
+    bool canRead(void) const;
 };
 
 

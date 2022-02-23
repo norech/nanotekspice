@@ -106,10 +106,7 @@ public:
 
 class Component4001 : public Component {
 public:
-    std::array<std::unique_ptr<Nor>, 4> _nors = {
-        std::make_unique<Nor>(), std::make_unique<Nor>(),
-        std::make_unique<Nor>(), std::make_unique<Nor>()
-    };
+    std::array<std::unique_ptr<Nor>, 4> _nors;
     Component4001(const std::string& name="4001");
 };
 

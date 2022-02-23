@@ -1,4 +1,5 @@
-#include "Component.hpp"
+#include "SpecialComponent.hpp"
+#include "../circuit/Circuit.hpp"
 #include <iostream>
 
 namespace nts {
@@ -19,14 +20,15 @@ void Component::setLink(std::size_t pin, IComponent& otherI,
 
     if (_pins[pin]->isLinkedTo(other, otherPin)) return;
 
-    auto it = _pins.find(pin);
-    if (it == _pins.end())
-        throw std::runtime_error(
-            std::string("Could not find pin: ") +
-                std::to_string(pin)
-        );
-    _pins[pin]->setLink(other, otherPin);
-    other.setLink(otherPin, *this, pin);
+    if (dynamic_cast<Input *>(this) != nullptr) {
+        other.getPins()[otherPin]->setLink(*this, pin);
+    } else {
+        other.getPins()[otherPin]->setLink(*this, pin);
+        this->getPins()[pin]->setLink(other, otherPin);
+    }
+    std::cout << "Component::setLink(" << getName() << ", "
+              << pin << ", " << other.getName() << ", "
+              << otherPin << ")" << std::endl;
 }
 
 Pin& Component::getPin(std::size_t pin) { return *_pins[pin]; }
@@ -42,8 +44,10 @@ Component::Component(const std::string& name) : _name(name) {}
 const std::string& Component::getName(void) const { return _name; }
 
 void Component::simulate(std::size_t tick) {
+    Circuit::unvisit();
     for (auto& it : _pins) {
         it.second->compute();
+        Circuit::unvisit();
     }
 }
 

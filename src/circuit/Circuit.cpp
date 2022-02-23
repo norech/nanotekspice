@@ -41,18 +41,21 @@ bool Circuit::alreadyHasName(const std::string& name) {
 }
 
 void Circuit::setLink(const std::string& leftComponent, std::size_t pinLeft, const std::string& rightComponent, std::size_t pinRight) {
-
     Component& left = Circuit::getFromName(leftComponent);
     Component& right = Circuit::getFromName(rightComponent);
+
+    std::cout << "Circuit::setLink(" << leftComponent << ", "
+              << pinLeft << ", " << rightComponent << ", "
+              << pinRight << ")" << std::endl;
 
     if (left.getName() == right.getName()) {
         throw std::runtime_error("Cannot linked component to itself");
     }
     const auto& pin1 = left.getPin(pinLeft);
     const auto& pin2 = right.getPin(pinRight);
-    if (pin1.getType() == pin2.getType()) {
+    /*if (pin1.getType() == pin2.getType()) {
         throw std::runtime_error("You can only link an Input with an output");
-    }
+    }*/
     left.setLink(pinLeft, right, pinRight);
 }
 
@@ -86,6 +89,7 @@ void Circuit::simulate(void) {
     circuit._tick++;
     for (auto& it : circuit._components) {
         it.second->simulate(circuit._tick);
+        Circuit::unvisit();
     }
 }
 

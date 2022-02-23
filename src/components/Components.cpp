@@ -4,6 +4,8 @@ namespace nts
 {
     Component4001::Component4001(const std::string& name) : Component(name)
     {
+        for (int i = 0; i < 4; i++) _nors[i] = std::make_unique<Nor>();
+
         addInputPin(1).addInputPin(2).addOutputPin(3)
             .addOutputPin(4).addInputPin(5).addOutputPin(6)
             .addInputPin(8).addInputPin(9).addOutputPin(10)

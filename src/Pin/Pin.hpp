@@ -17,7 +17,7 @@ public:
 protected:
     Component& _component;
     std::size_t _pin;
-    std::list<Link> _links;
+    std::vector<std::unique_ptr<Link>> _links;
     PinType _type;
     bool _visited = false;
     Tristate _state = Tristate::UNDEFINED;
@@ -25,8 +25,6 @@ protected:
 public:
     Pin(Component &component, std::size_t pin, PinType type);
     virtual ~Pin() = default;
-
-    Pin(const Pin &) = delete;
 
     bool otherIsSelf(const Component &other) const;
     bool isLinkedTo(const Component &other, std::size_t pin) const;

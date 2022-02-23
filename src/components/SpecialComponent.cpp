@@ -1,7 +1,7 @@
 #include "SpecialComponent.hpp"
 
 namespace nts {
-SpecialComponent::SpecialComponent(const std::string& name) : Component(name) {}
+SpecialComponent::SpecialComponent(const std::string& name) : Component(name) { }
 
 Tristate SpecialComponent::compute(std::size_t pin) {
     return _pins[pin]->compute();

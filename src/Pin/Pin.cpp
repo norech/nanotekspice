@@ -9,8 +9,8 @@ bool Pin::otherIsSelf(const Component &other) const {
 }
 
 bool Pin::isLinkedTo(const Component &other, std::size_t pin) const {
-    for (const auto it : _links) {
-        if (&it.first == &other && it.second == pin) {
+    for (const auto& it : _links) {
+        if (&it->first == &other && it->second == pin) {
             return true;
         }
     }
@@ -30,23 +30,30 @@ Pin &Pin::visit(void) {
     return *this;
 }
 Pin &Pin::unvisit(void) {
+    if (_visited == false) return *this;
     _visited = false;
+    for (auto& it : this->_component.getPins())
+        if (it.second->isVisited() == true)
+            it.second->unvisit();
+    for (auto& it : _links)
+        for (auto& it2 : it->first.getPins())
+            if (it2.second->isVisited() == true)
+                it2.second->unvisit();
     return *this;
 }
 
 Tristate Pin::compute(void) {
-    std::cout << "B: " << _component.getName() << " -> " << _state << std::endl;
     if (isVisited()) {
-        std::cout << "A: " << _component.getName() << " -> " << _state << std::endl;
         return _state;
     }
     visit();
-    std::cout << _links.size() << std::endl;
     for (auto &it : _links) {
-        std::cout << "\tComputing " << it.first.getName() << std::endl;
-        _state = orGate(_state, it.first.compute(it.second));
+        auto res = it->first.compute(it->second);
+        if (_state == UNDEFINED)
+            _state = res;
+        else if (res != UNDEFINED)
+            _state = orGate(res, _state);
     }
-    std::cout << "C: " << _component.getName() << " -> " << _state << std::endl;
     return _state;
 }
 
@@ -64,9 +71,13 @@ InputPin::InputPin(Component &component, std::size_t pin)
     : Pin(component, pin, PinType::INPUT) {}
 
 void Pin::setLink(Component &other, std::size_t otherPin) {
+    if (isLinkedTo(other, otherPin)) {
+        return;
+    }
     _links.push_back(
-        {other, otherPin}
+        std::unique_ptr<Link>(new Link {other, otherPin})
     );
+    other.getPin(otherPin).setLink(_component, _pin);
 }
 
 }  // namespace nts
