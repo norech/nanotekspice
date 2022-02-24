@@ -1,4 +1,4 @@
-#include "SpecialComponent.hpp"
+#include "GatesComponent.hpp"
 #include "../circuit/Circuit.hpp"
 #include <iostream>
 
@@ -20,12 +20,7 @@ void Component::setLink(std::size_t pin, IComponent& otherI,
 
     if (_pins[pin]->isLinkedTo(other, otherPin)) return;
 
-    if (dynamic_cast<Input *>(this) != nullptr) {
-        other.getPins()[otherPin]->setLink(*this, pin);
-    } else {
-        other.getPins()[otherPin]->setLink(*this, pin);
-        this->getPins()[pin]->setLink(other, otherPin);
-    }
+    this->getPins()[pin]->setLink(other, otherPin);
     std::cout << "Component::setLink(" << getName() << ", "
               << pin << ", " << other.getName() << ", "
               << otherPin << ")" << std::endl;
@@ -37,15 +32,18 @@ const Component::PinMap& Component::getPins(void) const { return _pins; }
 
 Component::PinMap& Component::getPins(void) { return _pins; }
 
-std::size_t Component::getTick(void) const { return _tick; }
-
 Component::Component(const std::string& name) : _name(name) {}
 
 const std::string& Component::getName(void) const { return _name; }
 
-void Component::simulate(std::size_t tick) {
+void Component::simulate(void) {
     for (auto& it : _pins) {
-        it.second->compute();
+        if (it.second->getType() == OUTPUT) {
+            it.second->getComponent().compute(it.first);
+        }
+    }
+    for (auto& it : _pins) {
+        it.second->getComponent().compute(it.first);
     }
 }
 
@@ -56,6 +54,9 @@ void Component::dump(void) const {
     }
 }
 
-Tristate Component::compute(std::size_t pin) { return _pins[pin]->compute(); }
+Tristate Component::compute(std::size_t pin) {
+    std::cout << "Component::compute(" << getName() << ", " << pin << ")" << std::endl;
+    return _pins[pin]->compute();
+}
 
 }  // namespace nts

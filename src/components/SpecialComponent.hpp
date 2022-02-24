@@ -10,7 +10,7 @@ protected:
 public:
     Tristate compute(std::size_t pin) override;
 
-    void simulate(std::size_t tick) override;
+    void simulate(void) override;
 };
 
 class Input : public SpecialComponent {
@@ -23,7 +23,7 @@ class Clock : public Input {
 public:
     Clock(const std::string& name);
 
-    void simulate(std::size_t tick) override;
+    void simulate(void) override;
 };
 
 class Output : public SpecialComponent {

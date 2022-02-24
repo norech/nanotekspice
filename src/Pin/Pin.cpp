@@ -1,5 +1,6 @@
 #include "Pin.hpp"
 #include <iostream>
+#include <algorithm>
 
 #include "../components/Component.hpp"
 
@@ -41,15 +42,18 @@ Pin &Pin::unvisit(void) {
 }
 
 Tristate Pin::compute(void) {
-    if (isVisited()) {
+    if (isVisited() == true) {
         return _state;
     }
     visit();
+    std::erase_if(_links, [](const auto& it) {
+        return it->first.getPin(it->second).isVisited();
+    });
     for (auto &it : _links) {
-        auto res = it->first.compute(it->second);
+        Tristate res = it->first.compute(it->second);
         if (_state == UNDEFINED)
             _state = res;
-        else if (res != UNDEFINED)
+        else
             _state = orGate(res, _state);
     }
     return _state;
@@ -77,5 +81,9 @@ void Pin::setLink(Component &other, std::size_t otherPin) {
     );
     other.getPin(otherPin).setLink(_component, _pin);
 }
+
+Component& Pin::getComponent(void) { return _component; }
+
+std::size_t Pin::getPin(void) const { return _pin; }
 
 }  // namespace nts

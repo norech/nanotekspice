@@ -1,14 +1,16 @@
 #include "SpecialComponent.hpp"
+#include <iostream>
 
 namespace nts {
 SpecialComponent::SpecialComponent(const std::string& name) : Component(name) { }
 
 Tristate SpecialComponent::compute(std::size_t pin) {
+    std::cout << "SpecialComponent::compute(" << getName() << ")" << std::endl;
     return _pins[pin]->compute();
 }
 
-void SpecialComponent::simulate(std::size_t tick) {
-    _tick = tick;
+void SpecialComponent::simulate(void) {
+    std::cout << "SpecialComponent::simulate(" << getName() << ")" << std::endl;
     _pins[1]->compute();
 }
 
@@ -20,8 +22,7 @@ void Input::setValue(Tristate value) { _pins[1]->setState(value); }
 
 Clock::Clock(const std::string& name) : Input(name) {}
 
-void Clock::simulate(std::size_t tick) {
-    _tick = tick;
+void Clock::simulate(void) {
     auto& it = _pins[1];
     if (it->getState() == Tristate::UNDEFINED) {
         return;

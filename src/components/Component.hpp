@@ -11,7 +11,6 @@ public:
 protected:
     PinMap _pins;
     const std::string _name;
-    std::size_t _tick = 0;
 
 public:
     Component(const std::string& name="Undefined");
@@ -28,17 +27,14 @@ public:
     const PinMap& getPins(void) const;
     PinMap& getPins(void);
 
-    std::size_t getTick(void) const override;
-
     const std::string& getName(void) const;
 
-    void simulate(std::size_t tick) override;
+    void simulate(void) override;
 
     void dump(void) const override;
 
     Tristate compute(std::size_t pin) override;
 
-    bool canRead(void) const;
 };
 
 

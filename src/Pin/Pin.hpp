@@ -15,7 +15,6 @@ public:
     using Link = std::pair<Component&, std::size_t>;
 
 protected:
-    Component& _component;
     std::size_t _pin;
     std::vector<std::unique_ptr<Link>> _links;
     PinType _type;
@@ -23,6 +22,7 @@ protected:
     Tristate _state = Tristate::UNDEFINED;
 
 public:
+    Component& _component;
     Pin(Component &component, std::size_t pin, PinType type);
     virtual ~Pin() = default;
 
@@ -41,6 +41,10 @@ public:
     virtual Tristate compute(void);
 
     Tristate update(Tristate state);
+
+    Component& getComponent(void);
+
+    std::size_t getPin(void) const;
 };
 
 class InputPin : public Pin {

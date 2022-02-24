@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <map>
+#include <queue>
 
 #include "../components/Components.hpp"
 
@@ -18,7 +19,7 @@ private:
     std::unordered_map<
         std::string,
         std::function<std::unique_ptr<Component>(const std::string&)>
-    > _factory = {}; 
+    > _factory = {};
 
 protected:
 public:
@@ -33,7 +34,7 @@ public:
     static Component& getFromName(const std::string& name);
     void setLink(const std::string& leftComponent, std::size_t pinLeft,
         const std::string& rightComponent, std::size_t left);
-    
+
     static bool alreadyHasName(const std::string& name);
 
     static void unvisit(void);
@@ -41,7 +42,7 @@ public:
     static void dump(void);
     static void display(void);
 
-    std::size_t getTick(void) const;
+    static std::size_t getTick(void);
 };
 
 }  // namespace nts

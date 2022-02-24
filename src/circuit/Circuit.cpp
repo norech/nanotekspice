@@ -85,10 +85,15 @@ void Circuit::unvisit(void) {
 
 void Circuit::simulate(void) {
     Circuit& circuit = Circuit::getInstance();
-    Circuit::unvisit();
     circuit._tick++;
+
+    Circuit::unvisit();
     for (auto& it : circuit._components) {
-        it.second->simulate(circuit._tick);
+        if (dynamic_cast<Output *>(it.second.get()) != nullptr)
+            it.second->simulate();
+    }
+    for (auto& it : circuit._components) {
+        it.second->simulate();
     }
 }
 
@@ -121,5 +126,5 @@ void Circuit::display(void) {
     }
 }
 
-std::size_t Circuit::getTick(void) const { return _tick; }
+std::size_t Circuit::getTick(void) { return Circuit::getInstance()._tick; }
 }  // namespace nts
