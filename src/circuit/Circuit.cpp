@@ -16,6 +16,7 @@ Circuit::Circuit(void) {
     _factory["true"] = [](const std::string& n) { return std::make_unique<True>(n); };
     _factory["false"] = [](const std::string& n) { return std::make_unique<False>(n); };
     _factory["4001"] = [](const std::string& n) { return std::make_unique<Component4001>(n); };
+    _factory["4081"] = [](const std::string& n) { return std::make_unique<Component4081>(n); };
 }
 
 Circuit& Circuit::getInstance(void) {
@@ -110,7 +111,6 @@ static void displayCircuitInfo(const std::string& name) {
     char state[2] = {'0', '1'};
     Circuit& circuit = Circuit::getInstance();
 
-    std::cout << "tick: " << circuit.getTick() << std::endl;
     std::cout << name << ": " << std::endl;
     for (auto& it : circuit.getComponents()) {
         T *in = dynamic_cast<T *>(it.second.get());

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 
+#include "../components/SpecialComponent.hpp"
 #include "../components/Component.hpp"
 
 namespace nts {
@@ -49,13 +50,16 @@ Tristate Pin::compute(void) {
     std::erase_if(_links, [](const auto& it) {
         return it->first.getPin(it->second).isVisited();
     });
+    Tristate tmp = UNDEFINED;
     for (auto &it : _links) {
         Tristate res = it->first.compute(it->second);
-        if (_state == UNDEFINED)
-            _state = res;
+        if (tmp == UNDEFINED)
+            tmp = res;
         else
-            _state = orGate(res, _state);
+            tmp = orGate(res, tmp);
     }
+    if (dynamic_cast<Input *>(&this->_component) == nullptr)
+        _state = tmp;
     return _state;
 }
 

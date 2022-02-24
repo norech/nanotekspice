@@ -102,12 +102,46 @@ public:
         }
     }
 };
+
+class FlipFlop : public Component {
+private:
+    std::unique_ptr<And> _r = std::make_unique<And>();
+    std::unique_ptr<And> _s = std::make_unique<And>();
+    std::unique_ptr<XNor> _qa = std::make_unique<XNor>();
+    std::unique_ptr<XNor> _qb = std::make_unique<XNor>();
+
+public:
+    FlipFlop(const std::string& name="FlipFlop") : Component(name) {
+        addInputPin(1).addInputPin(2).addInputPin(3)
+            .addOutputPin(4).addOutputPin(5);
+        this->setLink(1, *_r, 1);
+        this->setLink(2, *_r, 2);
+        this->setLink(2, *_s, 1);
+        this->setLink(3, *_s, 2);
+        _r->setLink(3, *_qa, 1);
+        _s->setLink(3, *_qb, 2);
+        _qa->setLink(2, *_qb, 3);
+        _qb->setLink(3, *_qa, 2);
+        _qa->setLink(3, *_qb, 1);
+    }
+};
+
 */
 
 class Component4001 : public Component {
-public:
+private:
     std::array<std::unique_ptr<Nor>, 4> _nors;
+
+public:
     Component4001(const std::string& name="4001");
+};
+
+class Component4081 : public Component {
+private:
+    std::array<std::unique_ptr<And>, 4> _and;
+
+public:
+    Component4081(const std::string& name="4081");
 };
 
 }  // namespace nts

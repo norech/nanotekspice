@@ -57,4 +57,14 @@ Nor::Nor(void) : Gate("Nor") {
     _or->setLink(3, *_not, 1);
     _not->setLink(2, *this, 3);
 }
+
+XNor::XNor(void) : Gate("Xnor") {
+    addInputPin(1).addInputPin(2).addOutputPin(3);
+
+    this->setLink(1, *_xor, 1);
+    this->setLink(2, *_xor, 2);
+    _xor->setLink(3, *_not, 1);
+    _not->setLink(2, *this, 3);
+}
+
 }

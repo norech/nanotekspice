@@ -57,4 +57,13 @@ namespace nts {
     public:
         Nor(void);
     };
+
+    class XNor : public Gate {
+    private:
+        std::unique_ptr<Xor> _xor = std::make_unique<Xor>();
+        std::unique_ptr<Not> _not = std::make_unique<Not>();
+    public:
+        XNor(void);
+    };
+
 }

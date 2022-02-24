@@ -7,7 +7,10 @@ SpecialComponent::SpecialComponent(const std::string& name) : Component(name) { 
 Tristate SpecialComponent::compute(std::size_t pin) {
     //std::cout << "SpecialComponent::compute(" << getName() << ")" << std::endl;
     auto& it = getPin(pin);
-    return it.compute();
+    if (dynamic_cast<Output *>(this)) {
+        return it.compute();
+    }
+    return it.getState();
 }
 
 void SpecialComponent::simulate(void) {
