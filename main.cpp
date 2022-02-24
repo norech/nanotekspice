@@ -17,7 +17,12 @@ int main(int argc, char *argv[]) {
         fp.parse();
         std::cout << "> ";
         while (std::getline(std::cin, cmd)) {
-            cp.parseCommand(cmd);
+            try {
+                cp.parseCommand(cmd);
+            } catch (std::runtime_error &e) {
+                if (std::string(e.what()) == "exit") return 0;
+                std::cerr << e.what() << std::endl;
+            }
             std::cout << "> ";
         }
     } catch (std::runtime_error &e) {
