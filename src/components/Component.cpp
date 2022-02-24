@@ -21,9 +21,9 @@ void Component::setLink(std::size_t pin, IComponent& otherI,
     if (_pins[pin]->isLinkedTo(other, otherPin)) return;
 
     this->getPins()[pin]->setLink(other, otherPin);
-    std::cout << "Component::setLink(" << getName() << ", "
+    /*std::cout << "Component::setLink(" << getName() << ", "
               << pin << ", " << other.getName() << ", "
-              << otherPin << ")" << std::endl;
+              << otherPin << ")" << std::endl;*/
 }
 
 Pin& Component::getPin(std::size_t pin) { return *_pins[pin]; }
@@ -55,7 +55,7 @@ void Component::dump(void) const {
 }
 
 Tristate Component::compute(std::size_t pin) {
-    std::cout << "Component::compute(" << getName() << ", " << pin << ")" << std::endl;
+    //std::cout << "Component::compute(" << getName() << ", " << pin << ")" << std::endl;
     return _pins[pin]->compute();
 }
 

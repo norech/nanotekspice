@@ -14,7 +14,7 @@ public:
 
 private:
     std::map<std::string, std::unique_ptr<Component>> _components;
-    std::size_t _tick;
+    std::size_t _tick = 0;
 
     std::unordered_map<
         std::string,
@@ -30,6 +30,8 @@ public:
 
     static void addComponent(const std::string& type,
                                    const std::string& name);
+
+    const std::map<std::string, std::unique_ptr<Component>>& getComponents() const;
 
     static Component& getFromName(const std::string& name);
     void setLink(const std::string& leftComponent, std::size_t pinLeft,

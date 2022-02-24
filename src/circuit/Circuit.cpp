@@ -7,7 +7,7 @@
 
 namespace nts {
 
-std::unique_ptr<Circuit> Circuit::circuit = nullptr;
+std::unique_ptr<Circuit> Circuit::circuit;
 
 Circuit::Circuit(void) {
     _factory["input"] = [](const std::string& n) { return std::make_unique<Input>(n); };
@@ -19,7 +19,7 @@ Circuit::Circuit(void) {
 }
 
 Circuit& Circuit::getInstance(void) {
-    if (Circuit::circuit == nullptr) circuit = std::make_unique<Circuit>();
+    if (Circuit::circuit.get() == nullptr) circuit = std::make_unique<Circuit>();
     return *Circuit::circuit;
 }
 
@@ -44,9 +44,9 @@ void Circuit::setLink(const std::string& leftComponent, std::size_t pinLeft, con
     Component& left = Circuit::getFromName(leftComponent);
     Component& right = Circuit::getFromName(rightComponent);
 
-    std::cout << "Circuit::setLink(" << leftComponent << ", "
+    /*std::cout << "Circuit::setLink(" << leftComponent << ", "
               << pinLeft << ", " << rightComponent << ", "
-              << pinRight << ")" << std::endl;
+              << pinRight << ")" << std::endl;*/
 
     if (left.getName() == right.getName()) {
         throw std::runtime_error("Cannot linked component to itself");
@@ -105,26 +105,36 @@ void Circuit::dump(void) {
     }
 }
 
-void Circuit::display(void) {
+template<typename T>
+static void displayCircuitInfo(const std::string& name) {
+    char state[2] = {'0', '1'};
     Circuit& circuit = Circuit::getInstance();
 
-    for (auto& it : circuit._components) {
-        Input *in = dynamic_cast<Input *>(it.second.get());
+    std::cout << "tick: " << circuit.getTick() << std::endl;
+    std::cout << name << ": " << std::endl;
+    for (auto& it : circuit.getComponents()) {
+        T *in = dynamic_cast<T *>(it.second.get());
         if (in != nullptr) {
-            if (dynamic_cast<Clock *>(in) != nullptr) {
-                it.second->dump();
-                continue;
-            }
-            std::cout << "Input [" << in->getName() << "]: " << (int)in->getPin(1).getState() << std::endl;
-            continue;
+            auto cur_state = it.second->getPin(1).getState();
+            std::cout << " " << it.second->getName() << ": " <<
+                    ((cur_state == UNDEFINED) ? 'U' : state[static_cast<int>(cur_state)])
+                    << std::endl;
         }
-        Output *out = dynamic_cast<Output *>(it.second.get());
-        if (out != nullptr)
-            std::cout << "Output: [" << out->getName() << "]: " << (int)out->getPin(1).getState() << std::endl;
-        else
-            it.second->dump();
     }
+
 }
+
+void Circuit::display(void) {
+
+    Circuit& circuit = Circuit::getInstance();
+
+    std::cout << "tick: " << circuit._tick << std::endl;
+    displayCircuitInfo<Input>("input(s)");
+    displayCircuitInfo<Output>("output(s)");
+}
+
+
+const std::map<std::string, std::unique_ptr<Component>>& Circuit::getComponents() const { return _components; }
 
 std::size_t Circuit::getTick(void) { return Circuit::getInstance()._tick; }
 }  // namespace nts
