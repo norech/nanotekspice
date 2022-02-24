@@ -49,34 +49,29 @@ Tristate Not::compute(std::size_t pin) {
     return _pins[2]->update(res);
 }
 
-/*
-Nor::Nor(void) : Gate("Nor") {
-    addInputPin(1).addInputPin(2).addOutputPin(3);
+    FullAdder::FullAdder(const std::string& name) : Gate(name) {
+        addInputPin(1).addInputPin(2).addInputPin(3).addOutputPin(4).addOutputPin(5);
 
-    this->setLink(1, *_or, 1);
-    this->setLink(2, *_or, 2);
-    _or->setLink(3, *_not, 1);
-    _not->setLink(2, *this, 3);
-}
+        _inputLinker->setLink(1, *this, 1);
+        _inputLinker->setLink(2, *this, 2);
+        _inputLinker->setLink(3, *_xorResult, 1);
+        _inputLinker->setLink(3, *_linker1, 1);
 
-XNor::XNor(void) : Gate("Xnor") {
-    addInputPin(1).addInputPin(2).addOutputPin(3);
+        _xorResult->setLink(1, *_inputLinker, 3);
+        _xorResult->setLink(2, *this, 3);
+        _xorResult->setLink(3, *this, 4);
 
-    this->setLink(1, *_xor, 1);
-    this->setLink(2, *_xor, 2);
-    _xor->setLink(3, *_not, 1);
-    _not->setLink(2, *this, 3);
-}
+        _linker1->setLink(1, *_inputLinker, 3);
+        _linker1->setLink(2, *this, 3);
+        _linker1->setLink(3, *_orResult, 1);
 
-Nand::Nand(void) : Gate("Nand") {
-    addInputPin(1).addInputPin(2).addOutputPin(3);
+        _linker2->setLink(1, *this, 1);
+        _linker2->setLink(2, *this, 2);
+        _linker2->setLink(3, *_orResult, 2);
 
-    this->setLink(1, *_and, 1);
-    this->setLink(2, *_and, 2);
-    _xor->setLink(3, *_not, 1);
-    _not->setLink(2, *this, 3);
-
-}
-*/
+        _orResult->setLink(1, *_linker1, 3);
+        _orResult->setLink(2, *_linker2, 3);
+        _orResult->setLink(3, *this, 5);
+    }
 
 }  // namespace nts

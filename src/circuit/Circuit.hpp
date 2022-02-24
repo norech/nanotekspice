@@ -5,7 +5,6 @@
 #include <queue>
 
 #include "../components/Components.hpp"
-#include "../components/SpecialComponent.hpp"
 
 namespace nts {
 

@@ -22,7 +22,7 @@ Circuit::Circuit(void) {
     _factory.insert(NTS_COMPONENT_FACTORY("4069", Component4069));
     _factory.insert(NTS_COMPONENT_FACTORY("4071", Component4071));
     _factory.insert(NTS_COMPONENT_FACTORY("4081", Component4081));
-    //_factory.insert(NTS_COMPONENT_FACTORY("4008", Component4008));
+    _factory.insert(NTS_COMPONENT_FACTORY("4008", Component4008));
 }
 
 Circuit& Circuit::getInstance(void) {
