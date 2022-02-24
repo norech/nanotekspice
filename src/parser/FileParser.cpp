@@ -64,8 +64,9 @@ void FileParser::parseLinks() {
         const std::string name2 = pinPair2.substr(0, pinPair2.find(':'));
         const std::string pin2 = pinPair2.substr(pinPair2.find(':') + 1);
 
-        Circuit& circuit = Circuit::getInstance();
-        circuit.setLink(name1, std::atoi(pin1.c_str()), name2, std::atoi(pin2.c_str()));
+        Circuit &circuit = Circuit::getInstance();
+        circuit.setLink(name1, std::atoi(pin1.c_str()), name2,
+                        std::atoi(pin2.c_str()));
     }
 }
 

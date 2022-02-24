@@ -13,7 +13,7 @@ protected:
     const std::string _name;
 
 public:
-    Component(const std::string& name="Undefined");
+    Component(const std::string& name = "Undefined");
     ~Component(void) override = default;
 
     Component& addInputPin(std::size_t pin);
@@ -34,9 +34,6 @@ public:
     void dump(void) const override;
 
     Tristate compute(std::size_t pin) override;
-
 };
-
-
 
 }  // namespace nts

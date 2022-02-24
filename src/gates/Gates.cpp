@@ -10,10 +10,6 @@ Tristate andGate(const Tristate a, const Tristate b) {
         return UNDEFINED;
 }
 
-Tristate nandGate(const Tristate a, const Tristate b) {
-    return notGate(andGate(a, b));
-}
-
 Tristate xorGate(const Tristate a, const Tristate b) {
     if (a == UNDEFINED || b == UNDEFINED)
         return UNDEFINED;

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <functional>
-#include <memory>
 #include <list>
+#include <memory>
 
 #include "../Tristate.hpp"
 
@@ -12,7 +12,7 @@ class Component;
 
 class Pin {
 public:
-    using Link = std::pair<Component&, std::size_t>;
+    using Link = std::pair<Component &, std::size_t>;
 
 protected:
     std::size_t _pin;
@@ -22,7 +22,7 @@ protected:
     Tristate _state = Tristate::UNDEFINED;
 
 public:
-    Component& _component;
+    Component &_component;
     Pin(Component &component, std::size_t pin, PinType type);
     virtual ~Pin() = default;
 
@@ -42,7 +42,7 @@ public:
 
     Tristate update(Tristate state);
 
-    Component& getComponent(void);
+    Component &getComponent(void);
 
     std::size_t getPin(void) const;
 };

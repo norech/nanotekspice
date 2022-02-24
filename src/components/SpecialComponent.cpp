@@ -1,20 +1,23 @@
 #include "SpecialComponent.hpp"
+
 #include <iostream>
 
 namespace nts {
-SpecialComponent::SpecialComponent(const std::string& name) : Component(name) { }
+SpecialComponent::SpecialComponent(const std::string& name) : Component(name) {}
 
 Tristate SpecialComponent::compute(std::size_t pin) {
-    //std::cout << "SpecialComponent::compute(" << getName() << ")" << std::endl;
+    // std::cout << "SpecialComponent::compute(" << getName() << ")" <<
+    // std::endl;
     auto& it = getPin(pin);
-    if (dynamic_cast<Output *>(this)) {
+    if (dynamic_cast<Output*>(this)) {
         return it.compute();
     }
     return it.getState();
 }
 
 void SpecialComponent::simulate(void) {
-    //std::cout << "SpecialComponent::simulate(" << getName() << ")" << std::endl;
+    // std::cout << "SpecialComponent::simulate(" << getName() << ")" <<
+    // std::endl;
     _pins[1]->compute();
 }
 

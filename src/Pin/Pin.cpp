@@ -1,9 +1,10 @@
 #include "Pin.hpp"
-#include <iostream>
-#include <algorithm>
 
-#include "../components/SpecialComponent.hpp"
+#include <algorithm>
+#include <iostream>
+
 #include "../components/Component.hpp"
+#include "../components/SpecialComponent.hpp"
 
 namespace nts {
 bool Pin::otherIsSelf(const Component &other) const {
@@ -11,7 +12,7 @@ bool Pin::otherIsSelf(const Component &other) const {
 }
 
 bool Pin::isLinkedTo(const Component &other, std::size_t pin) const {
-    for (const auto& it : _links) {
+    for (const auto &it : _links) {
         if (&it->first == &other && it->second == pin) {
             return true;
         }
@@ -34,11 +35,9 @@ Pin &Pin::visit(void) {
 Pin &Pin::unvisit(void) {
     if (_visited == false) return *this;
     _visited = false;
-    for (auto& it : this->_component.getPins())
-        it.second->unvisit();
-    for (auto& it : _links)
-        for (auto& it2 : it->first.getPins())
-            it2.second->unvisit();
+    for (auto &it : this->_component.getPins()) it.second->unvisit();
+    for (auto &it : _links)
+        for (auto &it2 : it->first.getPins()) it2.second->unvisit();
     return *this;
 }
 
@@ -47,7 +46,7 @@ Tristate Pin::compute(void) {
         return _state;
     }
     visit();
-    std::erase_if(_links, [](const auto& it) {
+    std::erase_if(_links, [](const auto &it) {
         return it->first.getPin(it->second).isVisited();
     });
     Tristate tmp = UNDEFINED;
@@ -58,8 +57,7 @@ Tristate Pin::compute(void) {
         else
             tmp = orGate(res, tmp);
     }
-    if (dynamic_cast<Input *>(&this->_component) == nullptr)
-        _state = tmp;
+    if (dynamic_cast<Input *>(&this->_component) == nullptr) _state = tmp;
     return _state;
 }
 
@@ -80,13 +78,11 @@ void Pin::setLink(Component &other, std::size_t otherPin) {
     if (isLinkedTo(other, otherPin)) {
         return;
     }
-    _links.push_back(
-        std::unique_ptr<Link>(new Link {other, otherPin})
-    );
+    _links.push_back(std::unique_ptr<Link>(new Link{other, otherPin}));
     other.getPin(otherPin).setLink(_component, _pin);
 }
 
-Component& Pin::getComponent(void) { return _component; }
+Component &Pin::getComponent(void) { return _component; }
 
 std::size_t Pin::getPin(void) const { return _pin; }
 

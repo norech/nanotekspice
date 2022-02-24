@@ -1,6 +1,7 @@
+#include "GatesComponent.hpp"
+
 #include <iostream>
 
-#include "GatesComponent.hpp"
 #include "../circuit/Circuit.hpp"
 
 namespace nts {
@@ -15,7 +16,8 @@ DualInputGate::DualInputGate(
 }
 
 Tristate DualInputGate::compute(std::size_t pin) {
-    //std::cout << "DualInputGate::compute(" << getName() << ", " << pin << ")" << std::endl;
+    // std::cout << "DualInputGate::compute(" << getName() << ", " << pin << ")"
+    // << std::endl;
     if (pin == 3) {
         const auto p1 = compute(1);
         const auto p2 = compute(2);
@@ -31,16 +33,14 @@ Tristate DualInputGate::compute(std::size_t pin) {
 
 And::And(void) : DualInputGate("AndGate", andGate) {}
 
-Nand::Nand(void) : DualInputGate("NandGate", nandGate) {}
-
 Xor::Xor(void) : DualInputGate("xorGate", xorGate) {}
 Or::Or(void) : DualInputGate("Or", orGate) {}
-Not::Not(void) : Gate("Not") {
-    addInputPin(1).addOutputPin(2);
-}
+
+Not::Not(void) : Gate("Not") { addInputPin(1).addOutputPin(2); }
 
 Tristate Not::compute(std::size_t pin) {
-    //std::cout << "Not::compute(" << getName() << ", " << pin << ")" << std::endl;
+    // std::cout << "Not::compute(" << getName() << ", " << pin << ")" <<
+    // std::endl;
     if (pin == 1) {
         auto res = _pins[1]->compute();
         return res;
@@ -49,6 +49,7 @@ Tristate Not::compute(std::size_t pin) {
     return _pins[2]->update(res);
 }
 
+/*
 Nor::Nor(void) : Gate("Nor") {
     addInputPin(1).addInputPin(2).addOutputPin(3);
 
@@ -67,4 +68,15 @@ XNor::XNor(void) : Gate("Xnor") {
     _not->setLink(2, *this, 3);
 }
 
+Nand::Nand(void) : Gate("Nand") {
+    addInputPin(1).addInputPin(2).addOutputPin(3);
+
+    this->setLink(1, *_and, 1);
+    this->setLink(2, *_and, 2);
+    _xor->setLink(3, *_not, 1);
+    _not->setLink(2, *this, 3);
+
 }
+*/
+
+}  // namespace nts

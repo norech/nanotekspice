@@ -1,6 +1,7 @@
-#include "GatesComponent.hpp"
-#include "../circuit/Circuit.hpp"
 #include <iostream>
+
+#include "../circuit/Circuit.hpp"
+#include "GatesComponent.hpp"
 
 namespace nts {
 
@@ -30,7 +31,9 @@ void Component::setLink(std::size_t pin, IComponent& otherI,
 Pin& Component::getPin(std::size_t pin) {
     auto it = _pins.find(pin);
 
-    if (it == _pins.end()) throw std::runtime_error(std::string("Cannot find pin: ") + std::to_string(pin));
+    if (it == _pins.end())
+        throw std::runtime_error(std::string("Cannot find pin: ") +
+                                 std::to_string(pin));
     return *it->second;
 }
 
@@ -56,12 +59,14 @@ void Component::simulate(void) {
 void Component::dump(void) const {
     std::cout << "Dump: " << _name << std::endl;
     for (const auto& it : _pins) {
-        std::cout << "pin" << std::to_string(it.first) << ": " << (int)it.second->getState() << std::endl;
+        std::cout << "pin" << std::to_string(it.first) << ": "
+                  << (int)it.second->getState() << std::endl;
     }
 }
 
 Tristate Component::compute(std::size_t pin) {
-    //std::cout << "Component::compute(" << getName() << ", " << pin << ")" << std::endl;
+    // std::cout << "Component::compute(" << getName() << ", " << pin << ")" <<
+    // std::endl;
     auto& it = getPin(pin);
     return it.compute();
 }

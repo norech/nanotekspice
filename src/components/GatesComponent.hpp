@@ -4,66 +4,64 @@
 
 namespace nts {
 
-    class Gate : public Component {
-    protected:
-        Gate(const std::string& name);
-    };
+class Gate : public Component {
+protected:
+    Gate(const std::string& name);
+};
 
-    class DualInputGate : public Gate {
-    private:
-        std::function<Tristate(const Tristate, const Tristate)> _gate;
+class DualInputGate : public Gate {
+private:
+    std::function<Tristate(const Tristate, const Tristate)> _gate;
 
-    protected:
-        DualInputGate(const std::string& name,
-            std::function<Tristate(const Tristate, const Tristate)> gate
-        );
+protected:
+    DualInputGate(const std::string& name,
+                  std::function<Tristate(const Tristate, const Tristate)> gate);
 
-    public:
-        Tristate compute(std::size_t pin) override;
-    };
+public:
+    Tristate compute(std::size_t pin) override;
+};
 
-    class And : public DualInputGate {
-    public:
-        And(void);
-    };
+class And : public DualInputGate {
+public:
+    And(void);
+};
 
-    class Nand : public DualInputGate {
-    public:
-        Nand(void);
-    };
+class Xor : public DualInputGate {
+public:
+    Xor(void);
+};
 
-    class Xor : public DualInputGate {
-    public:
-        Xor(void);
-    };
+class Or : public DualInputGate {
+public:
+    Or(void);
+};
 
-    class Or : public DualInputGate {
-    public:
-        Or(void);
-    };
+class Not : public Gate {
+public:
+    Not(void);
 
-    class Not : public Gate {
-    public:
-        Not(void);
+    Tristate compute(std::size_t pin) override;
+};
 
-        Tristate compute(std::size_t pin) override;
-    };
+template <typename T>
+class InputReverter : public Gate {
+private:
+    std::unique_ptr<T> _gate = std::make_unique<T>();
+    std::unique_ptr<Not> _not = std::make_unique<Not>();
 
-    class Nor : public Gate {
-    private:
-        std::unique_ptr<Or> _or = std::make_unique<Or>();
-        std::unique_ptr<Not> _not = std::make_unique<Not>();
+public:
+    InputReverter(const std::string& name = "InputReverter") : Gate(name) {
+        addInputPin(1).addInputPin(2).addOutputPin(3);
 
-    public:
-        Nor(void);
-    };
+        this->setLink(1, *_gate, 1);
+        this->setLink(2, *_gate, 2);
+        _gate->setLink(3, *_not, 1);
+        _not->setLink(2, *this, 3);
+    }
+};
 
-    class XNor : public Gate {
-    private:
-        std::unique_ptr<Xor> _xor = std::make_unique<Xor>();
-        std::unique_ptr<Not> _not = std::make_unique<Not>();
-    public:
-        XNor(void);
-    };
+using Nand = InputReverter<And>;
+using Xnor = InputReverter<Xor>;
+using Nor = InputReverter<Or>;
 
-}
+}  // namespace nts

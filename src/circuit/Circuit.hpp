@@ -1,7 +1,7 @@
 #pragma once
 
-#include <memory>
 #include <map>
+#include <memory>
 #include <queue>
 
 #include "../components/Components.hpp"
@@ -16,10 +16,9 @@ private:
     std::map<std::string, std::unique_ptr<Component>> _components;
     std::size_t _tick = 0;
 
-    std::unordered_map<
-        std::string,
-        std::function<std::unique_ptr<Component>(const std::string&)>
-    > _factory = {};
+    std::unordered_map<std::string, std::function<std::unique_ptr<Component>(
+                                        const std::string&)>>
+        _factory = {};
 
 protected:
 public:
@@ -28,14 +27,14 @@ public:
 
     static Circuit& getInstance(void);
 
-    static void addComponent(const std::string& type,
-                                   const std::string& name);
+    static void addComponent(const std::string& type, const std::string& name);
 
-    const std::map<std::string, std::unique_ptr<Component>>& getComponents() const;
+    const std::map<std::string, std::unique_ptr<Component>>& getComponents()
+        const;
 
     static Component& getFromName(const std::string& name);
     void setLink(const std::string& leftComponent, std::size_t pinLeft,
-        const std::string& rightComponent, std::size_t left);
+                 const std::string& rightComponent, std::size_t left);
 
     static bool alreadyHasName(const std::string& name);
 

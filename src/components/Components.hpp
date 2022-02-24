@@ -1,7 +1,8 @@
 #pragma once
 
-#include "GatesComponent.hpp"
 #include <vector>
+
+#include "GatesComponent.hpp"
 
 namespace nts {
 
@@ -128,20 +129,59 @@ public:
 
 */
 
-class Component4001 : public Component {
+template <typename T>
+class Component4SameGate : public Component {
 private:
-    std::array<std::unique_ptr<Nor>, 4> _nors;
+    std::array<std::unique_ptr<T>, 4> _gates = {
+        std::make_unique<T>(), std::make_unique<T>(), std::make_unique<T>(),
+        std::make_unique<T>()};
 
-public:
-    Component4001(const std::string& name="4001");
+protected:
+    Component4SameGate(const std::string& name) : Component(name) {
+        addInputPin(1)
+            .addInputPin(2)
+            .addOutputPin(3)
+            .addOutputPin(4)
+            .addInputPin(5)
+            .addOutputPin(6)
+            .addInputPin(8)
+            .addInputPin(9)
+            .addOutputPin(10)
+            .addOutputPin(11)
+            .addInputPin(12)
+            .addInputPin(13);
+
+        this->setLink(1, *_gates[0], 1);
+        this->setLink(2, *_gates[0], 2);
+        this->setLink(3, *_gates[0], 3);
+
+        this->setLink(4, *_gates[1], 3);
+        this->setLink(5, *_gates[1], 1);
+        this->setLink(6, *_gates[1], 2);
+
+        this->setLink(8, *_gates[2], 2);
+        this->setLink(9, *_gates[2], 1);
+        this->setLink(10, *_gates[2], 3);
+
+        this->setLink(11, *_gates[3], 3);
+        this->setLink(12, *_gates[3], 2);
+        this->setLink(13, *_gates[3], 1);
+    }
 };
 
-class Component4081 : public Component {
-private:
-    std::array<std::unique_ptr<And>, 4> _and;
-
+class Component4001 : public Component4SameGate<Nor> {
 public:
-    Component4081(const std::string& name="4081");
+    Component4001(const std::string& name = "4001");
+};
+
+class Component4011 : public Component4SameGate<Nand> {
+public:
+    Component4011(const std::string& name = "4011");
+};
+
+class Component4081 : public Component4SameGate<And> {
+public:
+    Component4081(const std::string& name = "4081");
 };
 
 }  // namespace nts
