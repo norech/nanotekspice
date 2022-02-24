@@ -33,8 +33,6 @@ static inline std::string trim(std::string s) {
 }
 
 void FileParser::parseChipsets() {
-    std::vector<Component> chipsets;
-
     while (std::getline(_stream, _line)) {
         _line = trim(_line.substr(0, _line.find('#')));
         if (_line.empty()) continue;
@@ -43,8 +41,10 @@ void FileParser::parseChipsets() {
         std::string type;
         std::string name;
         ss >> type >> name;
+        if (ss.bad() || type.empty() || name.empty()) {
+            throw std::runtime_error("Error: invalid chipset '" + _line + "'");
+        }
         Circuit::addComponent(type, name);
-        std::cerr << "Chipset: " << type << ", name: " << name << std::endl;
     }
 }
 
@@ -56,17 +56,30 @@ void FileParser::parseLinks() {
         std::stringstream ss(_line);
         std::string pinPair1;
         std::string pinPair2;
+        ss.clear();
         ss >> pinPair1 >> pinPair2;
-        std::cerr << pinPair1 << " linked to " << pinPair2 << std::endl;
+        if (ss.bad() || pinPair1.find(":") == std::string::npos ||
+            pinPair2.find(":") == std::string::npos) {
+            throw std::runtime_error("Error: invalid link '" + _line + "'");
+        }
 
         const std::string name1 = pinPair1.substr(0, pinPair1.find(':'));
         const std::string pin1 = pinPair1.substr(pinPair1.find(':') + 1);
         const std::string name2 = pinPair2.substr(0, pinPair2.find(':'));
         const std::string pin2 = pinPair2.substr(pinPair2.find(':') + 1);
 
+        std::stringstream ssPin1(pin1);
+        std::stringstream ssPin2(pin2);
+        int pin1Int;
+        int pin2Int;
+        ssPin1 >> pin1Int;
+        ssPin2 >> pin2Int;
+        if (name1.empty() || name2.empty() || ssPin1.bad() || ssPin2.bad()) {
+            throw std::runtime_error("Error: invalid pin link '" + _line + "'");
+        }
+
         Circuit &circuit = Circuit::getInstance();
-        circuit.setLink(name1, std::atoi(pin1.c_str()), name2,
-                        std::atoi(pin2.c_str()));
+        circuit.setLink(name1, pin1Int, name2, pin2Int);
     }
 }
 
@@ -76,7 +89,6 @@ Circuit &FileParser::parse() {
 
         if (_line.empty()) continue;
         if (_line.find(".chipsets:") == 0) {
-            std::cerr << "lol chipset" << std::endl;
             parseChipsets();
         }
         if (_line.find(".links:") == 0) {
