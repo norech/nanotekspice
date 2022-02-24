@@ -130,14 +130,14 @@ public:
 */
 
 template <typename T>
-class Component4SameGate : public Component {
+class GenericComponent7In5OutInternal : public Component {
 private:
     std::array<std::unique_ptr<T>, 4> _gates = {
         std::make_unique<T>(), std::make_unique<T>(), std::make_unique<T>(),
         std::make_unique<T>()};
 
 protected:
-    Component4SameGate(const std::string& name) : Component(name) {
+    GenericComponent7In5OutInternal(const std::string& name) : Component(name) {
         addInputPin(1)
             .addInputPin(2)
             .addOutputPin(3)
@@ -169,17 +169,38 @@ protected:
     }
 };
 
-class Component4001 : public Component4SameGate<Nor> {
+class Component4001 : public GenericComponent7In5OutInternal<Nor> {
 public:
     Component4001(const std::string& name = "4001");
 };
 
-class Component4011 : public Component4SameGate<Nand> {
+class Component4011 : public GenericComponent7In5OutInternal<Nand> {
 public:
     Component4011(const std::string& name = "4011");
 };
 
-class Component4081 : public Component4SameGate<And> {
+class Component4030 : public GenericComponent7In5OutInternal<Xor> {
+public:
+    Component4030(const std::string& name = "4030");
+};
+
+class Component4069 : public Component {
+private:
+    std::array<std::unique_ptr<Not>, 6> _nots = {
+        std::make_unique<Not>(), std::make_unique<Not>(),
+        std::make_unique<Not>(), std::make_unique<Not>(),
+        std::make_unique<Not>(), std::make_unique<Not>()
+    };
+public:
+    Component4069(const std::string& name = "4069");
+};
+
+class Component4071 : public GenericComponent7In5OutInternal<Or> {
+public:
+    Component4071(const std::string& name = "4071");
+};
+
+class Component4081 : public GenericComponent7In5OutInternal<And> {
 public:
     Component4081(const std::string& name = "4081");
 };

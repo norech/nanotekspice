@@ -5,8 +5,12 @@
 #include <queue>
 
 #include "../components/Components.hpp"
+#include "../components/SpecialComponent.hpp"
 
 namespace nts {
+
+#define NTS_COMPONENT_FACTORY(name, type) \
+    {name, [](const std::string& n){return std::make_unique<type>(n);}}
 
 class Circuit {
 public:
@@ -18,7 +22,7 @@ private:
 
     std::unordered_map<std::string, std::function<std::unique_ptr<Component>(
                                         const std::string&)>>
-        _factory = {};
+        _factory;
 
 protected:
 public:
@@ -29,7 +33,7 @@ public:
 
     static void addComponent(const std::string& type, const std::string& name);
 
-    const std::map<std::string, std::unique_ptr<Component>>& getComponents()
+    const std::map<std::string, std::unique_ptr<Component>>& getComponents(void)
         const;
 
     static Component& getFromName(const std::string& name);

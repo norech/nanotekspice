@@ -11,27 +11,18 @@ namespace nts {
 std::unique_ptr<Circuit> Circuit::circuit;
 
 Circuit::Circuit(void) {
-    _factory["input"] = [](const std::string& n) {
-        return std::make_unique<Input>(n);
-    };
-    _factory["clock"] = [](const std::string& n) {
-        return std::make_unique<Clock>(n);
-    };
-    _factory["output"] = [](const std::string& n) {
-        return std::make_unique<Output>(n);
-    };
-    _factory["true"] = [](const std::string& n) {
-        return std::make_unique<True>(n);
-    };
-    _factory["false"] = [](const std::string& n) {
-        return std::make_unique<False>(n);
-    };
-    _factory["4001"] = [](const std::string& n) {
-        return std::make_unique<Component4001>(n);
-    };
-    _factory["4081"] = [](const std::string& n) {
-        return std::make_unique<Component4081>(n);
-    };
+    _factory.insert(NTS_COMPONENT_FACTORY("input", Input));
+    _factory.insert(NTS_COMPONENT_FACTORY("clock", Clock));
+    _factory.insert(NTS_COMPONENT_FACTORY("output", Output));
+    _factory.insert(NTS_COMPONENT_FACTORY("true", True));
+    _factory.insert(NTS_COMPONENT_FACTORY("false", False));
+    _factory.insert(NTS_COMPONENT_FACTORY("4001", Component4001));
+    _factory.insert(NTS_COMPONENT_FACTORY("4011", Component4011));
+    _factory.insert(NTS_COMPONENT_FACTORY("4030", Component4030));
+    _factory.insert(NTS_COMPONENT_FACTORY("4069", Component4069));
+    _factory.insert(NTS_COMPONENT_FACTORY("4071", Component4071));
+    _factory.insert(NTS_COMPONENT_FACTORY("4081", Component4081));
+    //_factory.insert(NTS_COMPONENT_FACTORY("4008", Component4008));
 }
 
 Circuit& Circuit::getInstance(void) {
@@ -149,7 +140,7 @@ void Circuit::display(void) {
 }
 
 const std::map<std::string, std::unique_ptr<Component>>&
-Circuit::getComponents() const {
+Circuit::getComponents(void) const {
     return _components;
 }
 
