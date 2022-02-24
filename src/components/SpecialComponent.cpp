@@ -5,12 +5,13 @@ namespace nts {
 SpecialComponent::SpecialComponent(const std::string& name) : Component(name) { }
 
 Tristate SpecialComponent::compute(std::size_t pin) {
-    std::cout << "SpecialComponent::compute(" << getName() << ")" << std::endl;
-    return _pins[pin]->compute();
+    //std::cout << "SpecialComponent::compute(" << getName() << ")" << std::endl;
+    auto& it = getPin(pin);
+    return it.compute();
 }
 
 void SpecialComponent::simulate(void) {
-    std::cout << "SpecialComponent::simulate(" << getName() << ")" << std::endl;
+    //std::cout << "SpecialComponent::simulate(" << getName() << ")" << std::endl;
     _pins[1]->compute();
 }
 

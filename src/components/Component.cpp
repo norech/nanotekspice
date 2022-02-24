@@ -17,16 +17,22 @@ Component& Component::addInputPin(std::size_t pin) {
 void Component::setLink(std::size_t pin, IComponent& otherI,
                         std::size_t otherPin) {
     Component& other = dynamic_cast<Component&>(otherI);
+    auto& it = getPin(pin);
 
-    if (_pins[pin]->isLinkedTo(other, otherPin)) return;
+    if (it.isLinkedTo(other, otherPin)) return;
 
-    this->getPins()[pin]->setLink(other, otherPin);
+    it.setLink(other, otherPin);
     /*std::cout << "Component::setLink(" << getName() << ", "
               << pin << ", " << other.getName() << ", "
               << otherPin << ")" << std::endl;*/
 }
 
-Pin& Component::getPin(std::size_t pin) { return *_pins[pin]; }
+Pin& Component::getPin(std::size_t pin) {
+    auto it = _pins.find(pin);
+
+    if (it == _pins.end()) throw std::runtime_error(std::string("Cannot find pin: ") + std::to_string(pin));
+    return *it->second;
+}
 
 const Component::PinMap& Component::getPins(void) const { return _pins; }
 
@@ -56,7 +62,8 @@ void Component::dump(void) const {
 
 Tristate Component::compute(std::size_t pin) {
     //std::cout << "Component::compute(" << getName() << ", " << pin << ")" << std::endl;
-    return _pins[pin]->compute();
+    auto& it = getPin(pin);
+    return it.compute();
 }
 
 }  // namespace nts

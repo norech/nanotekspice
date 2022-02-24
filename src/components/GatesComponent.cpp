@@ -15,14 +15,14 @@ DualInputGate::DualInputGate(
 }
 
 Tristate DualInputGate::compute(std::size_t pin) {
-    std::cout << "DualInputGate::compute(" << getName() << ", " << pin << ")" << std::endl;
+    //std::cout << "DualInputGate::compute(" << getName() << ", " << pin << ")" << std::endl;
     if (pin == 3) {
         const auto p1 = compute(1);
         const auto p2 = compute(2);
         const auto res = _gate(p1, p2);
-        std::cout << "DualInputGate::compute(" << getName() << ", "
+        /*std::cout << "DualInputGate::compute(" << getName() << ", "
                     << pin << ") = " << "p1: " << (int)p1 << ", p2: " << (int)p2
-                    << ", res: " << (int)res << std::endl;
+                    << ", res: " << (int)res << std::endl;*/
         return _pins[3]->update(res);
     }
     auto res = _pins[pin]->compute();
@@ -40,7 +40,7 @@ Not::Not(void) : Gate("Not") {
 }
 
 Tristate Not::compute(std::size_t pin) {
-    std::cout << "Not::compute(" << getName() << ", " << pin << ")" << std::endl;
+    //std::cout << "Not::compute(" << getName() << ", " << pin << ")" << std::endl;
     if (pin == 1) {
         auto res = _pins[1]->compute();
         return res;
