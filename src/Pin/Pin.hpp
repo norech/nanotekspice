@@ -5,15 +5,15 @@
 #include <memory>
 
 #include "../Tristate.hpp"
+#include "./Link.hpp"
 
 namespace nts {
 
 class Component;
+class Link;
 
 class Pin {
 public:
-    using Link = std::pair<Component &, std::size_t>;
-
 protected:
     std::size_t _pin;
     std::vector<std::unique_ptr<Link>> _links;
@@ -29,6 +29,7 @@ public:
     bool otherIsSelf(const Component &other) const;
     bool isLinkedTo(const Component &other, std::size_t pin) const;
     void setLink(Component &other, std::size_t otherPin);
+    const std::vector<std::unique_ptr<Link>> &getLinks(void) const;
 
     PinType getType(void) const;
     Tristate getState(void) const;

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iostream>
 
+#include "../Pin/Link.hpp"
 #include "../components/Component.hpp"
 #include "../components/SpecialComponent.hpp"
 
@@ -13,7 +14,8 @@ bool Pin::otherIsSelf(const Component &other) const {
 
 bool Pin::isLinkedTo(const Component &other, std::size_t pin) const {
     for (const auto &it : _links) {
-        if (&it->first == &other && it->second == pin) {
+        if (&it->getTargetComponent() == &other &&
+            it->getTargetPinIndex() == pin) {
             return true;
         }
     }
@@ -35,9 +37,13 @@ Pin &Pin::visit(void) {
 Pin &Pin::unvisit(void) {
     if (_visited == false) return *this;
     _visited = false;
-    for (auto &it : this->_component.getPins()) it.second->unvisit();
-    for (auto &it : _links)
-        for (auto &it2 : it->first.getPins()) it2.second->unvisit();
+
+    for (auto &pinMap : this->_component.getPins()) pinMap.second->unvisit();
+
+    for (auto &link : _links)
+        for (auto &pinMap : link->getTargetComponent().getPins())
+            pinMap.second->unvisit();
+
     return *this;
 }
 
@@ -46,12 +52,13 @@ Tristate Pin::compute(void) {
         return _state;
     }
     visit();
-    std::erase_if(_links, [](const auto &it) {
-        return it->first.getPin(it->second).isVisited();
+    std::erase_if(_links, [](const std::unique_ptr<nts::Link> &link) {
+        return link->getTargetPin().isVisited();
     });
     Tristate tmp = UNDEFINED;
-    for (auto &it : _links) {
-        Tristate res = it->first.compute(it->second);
+    for (auto &link : _links) {
+        Tristate res =
+            link->getTargetComponent().compute(link->getTargetPinIndex());
         if (tmp == UNDEFINED)
             tmp = res;
         else
@@ -59,6 +66,10 @@ Tristate Pin::compute(void) {
     }
     if (dynamic_cast<Input *>(&this->_component) == nullptr) _state = tmp;
     return _state;
+}
+
+const std::vector<std::unique_ptr<Link>> &Pin::getLinks(void) const {
+    return _links;
 }
 
 Tristate Pin::update(Tristate state) {
@@ -78,7 +89,8 @@ void Pin::setLink(Component &other, std::size_t otherPin) {
     if (isLinkedTo(other, otherPin)) {
         return;
     }
-    _links.push_back(std::unique_ptr<Link>(new Link{other, otherPin}));
+    _links.push_back(
+        std::unique_ptr<Link>(new Link(_component, _pin, other, otherPin)));
     other.getPin(otherPin).setLink(_component, _pin);
 }
 

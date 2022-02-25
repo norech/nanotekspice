@@ -35,14 +35,11 @@ private:
     // pin4 == out
     // pin5 == carryout
     std::array<std::unique_ptr<FullAdder>, 4> _adders = {
-        std::unique_ptr<FullAdder>(),
-        std::unique_ptr<FullAdder>(),
-        std::unique_ptr<FullAdder>(),
-        std::unique_ptr<FullAdder>()
-    };
+        std::unique_ptr<FullAdder>(), std::unique_ptr<FullAdder>(),
+        std::unique_ptr<FullAdder>(), std::unique_ptr<FullAdder>()};
 
 public:
-    Component4008(const std::string& name="4008");
+    Component4008(const std::string& name = "4008");
 };
 
 /*
@@ -85,7 +82,7 @@ protected:
             .addOutputPin(3)
             .addOutputPin(4)
             .addInputPin(5)
-            .addOutputPin(6)
+            .addInputPin(6)
             .addInputPin(8)
             .addInputPin(9)
             .addOutputPin(10)
@@ -93,21 +90,19 @@ protected:
             .addInputPin(12)
             .addInputPin(13);
 
-        this->setLink(1, *_gates[0], 1);
-        this->setLink(2, *_gates[0], 2);
+        // O -> I
+        _gates[0]->setLink(1, *this, 1);
+        _gates[0]->setLink(2, *this, 2);
         this->setLink(3, *_gates[0], 3);
-
         this->setLink(4, *_gates[1], 3);
-        this->setLink(5, *_gates[1], 1);
-        this->setLink(6, *_gates[1], 2);
-
-        this->setLink(8, *_gates[2], 2);
-        this->setLink(9, *_gates[2], 1);
+        _gates[1]->setLink(1, *this, 5);
+        _gates[1]->setLink(2, *this, 6);
         this->setLink(10, *_gates[2], 3);
-
+        _gates[2]->setLink(1, *this, 8);
+        _gates[2]->setLink(2, *this, 9);
         this->setLink(11, *_gates[3], 3);
-        this->setLink(12, *_gates[3], 2);
-        this->setLink(13, *_gates[3], 1);
+        _gates[3]->setLink(1, *this, 12);
+        _gates[3]->setLink(2, *this, 13);
     }
 };
 
@@ -131,8 +126,8 @@ private:
     std::array<std::unique_ptr<Not>, 6> _nots = {
         std::make_unique<Not>(), std::make_unique<Not>(),
         std::make_unique<Not>(), std::make_unique<Not>(),
-        std::make_unique<Not>(), std::make_unique<Not>()
-    };
+        std::make_unique<Not>(), std::make_unique<Not>()};
+
 public:
     Component4069(const std::string& name = "4069");
 };

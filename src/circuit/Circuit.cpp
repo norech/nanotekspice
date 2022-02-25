@@ -55,15 +55,25 @@ void Circuit::setLink(const std::string& leftComponent, std::size_t pinLeft,
               << pinLeft << ", " << rightComponent << ", "
               << pinRight << ")" << std::endl;*/
 
-    if (left.getName() == right.getName()) {
+    // NOTE: this cannot work because of the requirements
+    /*if (left.getName() == right.getName()) {
         throw std::runtime_error("Cannot linked component to itself");
-    }
+    }*/
     const auto& pin1 = left.getPin(pinLeft);
     const auto& pin2 = right.getPin(pinRight);
-    /*if (pin1.getType() == pin2.getType()) {
-        throw std::runtime_error("You can only link an Input with an output");
-    }*/
-    left.setLink(pinLeft, right, pinRight);
+
+    if (pin1.getType() == OUTPUT && pin2.getType() == INPUT) {
+        left.setLink(pinLeft, right, pinRight);
+    }
+    else if (pin1.getType() == INPUT && pin2.getType() == OUTPUT) {
+        right.setLink(pinRight, left, pinLeft);
+    }
+    else {
+        throw std::runtime_error(
+            std::string("Cannot link two pins of the same type '") +
+            std::to_string(pin1.getPin()) + "' and '" +
+            std::to_string(pin2.getPin()) + "'");
+    }
 }
 
 void Circuit::addComponent(const std::string& type, const std::string& name) {
@@ -98,9 +108,6 @@ void Circuit::simulate(void) {
     for (auto& it : circuit._components) {
         if (dynamic_cast<Output*>(it.second.get()) != nullptr)
             it.second->simulate();
-    }
-    for (auto& it : circuit._components) {
-        it.second->simulate();
     }
 }
 
@@ -139,8 +146,8 @@ void Circuit::display(void) {
     displayCircuitInfo<Output>("output(s)");
 }
 
-const std::map<std::string, std::unique_ptr<Component>>&
-Circuit::getComponents(void) const {
+const std::map<std::string, std::unique_ptr<Component>>& Circuit::getComponents(
+    void) const {
     return _components;
 }
 
