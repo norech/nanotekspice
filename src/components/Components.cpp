@@ -69,7 +69,7 @@ Component4008::Component4008(const std::string& name) : Component(name) {
         13, 12, 11, 10
     };
     for (int i = 0; i < outputs.size(); i++) {
-        this->setLink(outputs[i], *_adders[_adders.size() - i - 1], 3);
+        this->setLink(outputs[i], *_adders[_adders.size() - i - 1], 4);
     }
 
     // set Last carry out
