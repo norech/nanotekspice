@@ -15,12 +15,14 @@ Circuit::Circuit(void) {
     _factory.insert(NTS_COMPONENT_FACTORY("true", True));
     _factory.insert(NTS_COMPONENT_FACTORY("false", False));
     _factory.insert(NTS_COMPONENT_FACTORY("4001", Component4001));
+    _factory.insert(NTS_COMPONENT_FACTORY("4008", Component4008));
     _factory.insert(NTS_COMPONENT_FACTORY("4011", Component4011));
     _factory.insert(NTS_COMPONENT_FACTORY("4030", Component4030));
-    _factory.insert(NTS_COMPONENT_FACTORY("4069", Component4069));
     _factory.insert(NTS_COMPONENT_FACTORY("4071", Component4071));
     _factory.insert(NTS_COMPONENT_FACTORY("4081", Component4081));
-    _factory.insert(NTS_COMPONENT_FACTORY("4008", Component4008));
+
+    _factory.insert(NTS_COMPONENT_FACTORY("HalfAdder", HalfAdder));
+    _factory.insert(NTS_COMPONENT_FACTORY("FullAdder", FullAdder));
 }
 
 Component& Circuit::getFromName(const std::string& name) {
@@ -55,16 +57,18 @@ void Circuit::setLink(const std::string& leftComponent, std::size_t pinLeft,
     const auto& pin2 = right.getPin(pinRight);
 
     if (pin1.getType() == OUTPUT && pin2.getType() == INPUT) {
-        left.setLink(pinLeft, right, pinRight);
+        right.setLink(pinRight, left, pinLeft);
     }
     else if (pin1.getType() == INPUT && pin2.getType() == OUTPUT) {
-        right.setLink(pinRight, left, pinLeft);
+        left.setLink(pinLeft, right, pinRight);
     }
     else {
         throw std::runtime_error(
             std::string("Cannot link two pins of the same type '") +
-            std::to_string(pin1.getPin()) + "' and '" +
-            std::to_string(pin2.getPin()) + "'");
+            leftComponent + " " + std::to_string(pin1.getPin()) + "' and '" +
+            rightComponent + " " + std::to_string(pin2.getPin()) + "'" +
+            " -> type is " + (pin1.getType() == INPUT ? "Input" : "Output")
+        );
     }
 }
 
@@ -98,7 +102,7 @@ void Circuit::simulate(void) {
 
     Circuit::unvisit();
     for (auto& it : circuit._components) {
-        if (dynamic_cast<Output*>(it.second.get()) != nullptr)
+        //if (dynamic_cast<Output*>(it.second.get()) != nullptr)
             it.second->simulate();
     }
 }

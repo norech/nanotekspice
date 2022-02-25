@@ -47,11 +47,6 @@ const std::string& Component::getName(void) const { return _name; }
 
 void Component::simulate(void) {
     for (auto& it : _pins) {
-        if (it.second->getType() == OUTPUT) {
-            it.second->getComponent().compute(it.first);
-        }
-    }
-    for (auto& it : _pins) {
         it.second->getComponent().compute(it.first);
     }
 }

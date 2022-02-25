@@ -52,9 +52,6 @@ Tristate Pin::compute(void) {
         return _state;
     }
     visit();
-    std::erase_if(_links, [](const std::unique_ptr<nts::Link> &link) {
-        return link->getTargetPin().isVisited();
-    });
     Tristate tmp = UNDEFINED;
     for (auto &link : _links) {
         Tristate res =
@@ -91,7 +88,6 @@ void Pin::setLink(Component &other, std::size_t otherPin) {
     }
     _links.push_back(
         std::unique_ptr<Link>(new Link(_component, _pin, other, otherPin)));
-    other.getPin(otherPin).setLink(_component, _pin);
 }
 
 Component &Pin::getComponent(void) { return _component; }

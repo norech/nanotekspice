@@ -49,29 +49,4 @@ Tristate Not::compute(std::size_t pin) {
     return _pins[2]->update(res);
 }
 
-    FullAdder::FullAdder(const std::string& name) : Gate(name) {
-        addInputPin(1).addInputPin(2).addInputPin(3).addOutputPin(4).addOutputPin(5);
-
-        _inputLinker->setLink(1, *this, 1);
-        _inputLinker->setLink(2, *this, 2);
-        _inputLinker->setLink(3, *_xorResult, 1);
-        _inputLinker->setLink(3, *_linker1, 1);
-
-        _xorResult->setLink(1, *_inputLinker, 3);
-        _xorResult->setLink(2, *this, 3);
-        _xorResult->setLink(3, *this, 4);
-
-        _linker1->setLink(1, *_inputLinker, 3);
-        _linker1->setLink(2, *this, 3);
-        _linker1->setLink(3, *_orResult, 1);
-
-        _linker2->setLink(1, *this, 1);
-        _linker2->setLink(2, *this, 2);
-        _linker2->setLink(3, *_orResult, 2);
-
-        _orResult->setLink(1, *_linker1, 3);
-        _orResult->setLink(2, *_linker2, 3);
-        _orResult->setLink(3, *this, 5);
-    }
-
 }  // namespace nts

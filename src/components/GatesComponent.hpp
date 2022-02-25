@@ -64,17 +64,4 @@ using Nand = InputReverter<And>;
 using Xnor = InputReverter<Xor>;
 using Nor = InputReverter<Or>;
 
-class FullAdder : public Gate {
-private:
-    std::unique_ptr<Xor> _xorResult = std::make_unique<Xor>();
-    std::unique_ptr<Or> _orResult = std::make_unique<Or>();
-
-    std::unique_ptr<And> _linker1 = std::make_unique<And>();
-    std::unique_ptr<And> _linker2 = std::make_unique<And>();
-    std::unique_ptr<Xor> _inputLinker = std::make_unique<Xor>();
-
-public:
-    FullAdder(const std::string& name="FullAdder");
-};
-
 }  // namespace nts
