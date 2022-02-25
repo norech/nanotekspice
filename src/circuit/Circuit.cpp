@@ -1,14 +1,19 @@
 #include "../circuit/Circuit.hpp"
 
+#include <string.h>
+
 #include <iostream>
 #include <memory>
 
+#include "../components/Board.hpp"
+#include "../components/Component.hpp"
 #include "../components/Components.hpp"
 #include "../components/SpecialComponent.hpp"
+#include "../parser/CircuitParser.hpp"
 
 namespace nts {
 
-Circuit::Circuit(void) {
+Circuit::Circuit(const std::string& name) : _name(name) {
     _factory.insert(NTS_COMPONENT_FACTORY("input", Input));
     _factory.insert(NTS_COMPONENT_FACTORY("clock", Clock));
     _factory.insert(NTS_COMPONENT_FACTORY("output", Output));
@@ -18,26 +23,28 @@ Circuit::Circuit(void) {
     _factory.insert(NTS_COMPONENT_FACTORY("4008", Component4008));
     _factory.insert(NTS_COMPONENT_FACTORY("4011", Component4011));
     _factory.insert(NTS_COMPONENT_FACTORY("4030", Component4030));
-    _factory.insert(NTS_COMPONENT_FACTORY("4071", Component4071));
+    //_factory.insert(NTS_COMPONENT_FACTORY("4071", Component4071));
     _factory.insert(NTS_COMPONENT_FACTORY("4081", Component4081));
 
     _factory.insert(NTS_COMPONENT_FACTORY("HalfAdder", HalfAdder));
     _factory.insert(NTS_COMPONENT_FACTORY("FullAdder", FullAdder));
+    _factory.insert(NTS_COMPONENT_FACTORY("_or", Or));
+    _factory.insert(NTS_COMPONENT_FROM_FILE("or", "../components/or.nts"));
+    _factory.insert(NTS_COMPONENT_FROM_FILE("4071", "../components/4071.nts"));
 }
 
 Component& Circuit::getFromName(const std::string& name) {
-    Circuit& circuit = *this;
-    auto it = circuit._components.find(name);
+    auto it = _components.find(name);
 
-    if (it == circuit._components.end())
-        throw std::runtime_error(
-            std::string("Circuit does not contain a component named ") + name);
+    if (it == _components.end())
+        throw std::runtime_error(std::string("Circuit '") + _name +
+                                 "' does not contain a component named " +
+                                 name);
     return *it->second;
 }
 
 bool Circuit::alreadyHasName(const std::string& name) {
-    const auto& components = this->_components;
-    return components.find(name) != components.end();
+    return _components.find(name) != _components.end();
 }
 
 void Circuit::setLink(const std::string& leftComponent, std::size_t pinLeft,
@@ -67,29 +74,24 @@ void Circuit::setLink(const std::string& leftComponent, std::size_t pinLeft,
             std::string("Cannot link two pins of the same type '") +
             leftComponent + " " + std::to_string(pin1.getPin()) + "' and '" +
             rightComponent + " " + std::to_string(pin2.getPin()) + "'" +
-            " -> type is " + (pin1.getType() == INPUT ? "Input" : "Output")
-        );
+            " -> type is " + (pin1.getType() == INPUT ? "Input" : "Output"));
     }
 }
 
 void Circuit::addComponent(const std::string& type, const std::string& name) {
-    Circuit& circuit = *this;
-
-    if (circuit.alreadyHasName(name)) {
+    if (alreadyHasName(name)) {
         throw std::runtime_error(
             "Cannot add twice a component with the same name");
     }
-    if (circuit._factory.find(type) == circuit._factory.end()) {
+    if (_factory.find(type) == _factory.end()) {
         throw std::runtime_error(std::string("Unknown component type: ") +
                                  type);
     }
-    circuit._components[name] = std::move(circuit._factory[type](name));
+    _components[name] = std::move(_factory[type](name));
 }
 
 void Circuit::unvisit(void) {
-    Circuit& circuit = *this;
-
-    for (auto& it : circuit._components) {
+    for (auto& it : _components) {
         for (auto& pin : it.second->getPins()) {
             pin.second->unvisit();
         }
@@ -97,20 +99,19 @@ void Circuit::unvisit(void) {
 }
 
 void Circuit::simulate(void) {
-    Circuit& circuit = *this;
-    circuit._tick++;
+    _tick++;
 
     Circuit::unvisit();
-    for (auto& it : circuit._components) {
-        //if (dynamic_cast<Output*>(it.second.get()) != nullptr)
-            it.second->simulate();
+    for (auto& it : _components) {
+        // if (dynamic_cast<Output*>(it.second.get()) != nullptr)
+        it.second->simulate();
     }
 }
 
 void Circuit::dump(void) {
     Circuit& circuit = *this;
 
-    for (auto& it : circuit._components) {
+    for (auto& it : _components) {
         it.second->dump();
     }
 }
@@ -120,25 +121,29 @@ void displayCircuitInfo(Circuit& circuit, const std::string& name) {
     char state[2] = {'0', '1'};
 
     std::cout << name << ": " << std::endl;
+
+    std::vector<std::pair<std::string, char>> states;
+
     for (auto& it : circuit.getComponents()) {
         T* in = dynamic_cast<T*>(it.second.get());
         if (in != nullptr) {
             auto cur_state = it.second->getPin(1).getState();
-            std::cout << " " << it.second->getName() << ": "
-                      << ((cur_state == UNDEFINED)
-                              ? 'U'
-                              : state[static_cast<int>(cur_state)])
-                      << std::endl;
+            states.push_back(std::make_pair(
+                it.second->getName(),
+                cur_state == UNDEFINED ? 'U'
+                                       : state[static_cast<int>(cur_state)]));
         }
+    }
+    std::sort(states.begin(), states.end());
+    for (auto& it : states) {
+        std::cout << "  " << it.first << ": " << it.second << std::endl;
     }
 }
 
 void Circuit::display(void) {
-    Circuit& circuit = *this;
-
-    std::cout << "tick: " << circuit._tick << std::endl;
-    displayCircuitInfo<Input>(circuit, "input(s)");
-    displayCircuitInfo<Output>(circuit, "output(s)");
+    std::cout << "tick: " << _tick << std::endl;
+    displayCircuitInfo<Input>(*this, "input(s)");
+    displayCircuitInfo<Output>(*this, "output(s)");
 }
 
 const std::map<std::string, std::unique_ptr<Component>>& Circuit::getComponents(
@@ -147,4 +152,32 @@ const std::map<std::string, std::unique_ptr<Component>>& Circuit::getComponents(
 }
 
 std::size_t Circuit::getTick(void) { return _tick; }
+
+void Circuit::setInput(const std::string& name, Tristate value) {
+    /*
+    std::cerr << "Circuit::setInput(" << name << ", " << value << ")"
+              << std::endl;
+    */
+    Component* comp = &getFromName(name);
+    // std::cerr << "component: " << comp->getName() << std::endl;
+    Input* in = dynamic_cast<Input*>(comp);
+
+    if (in == nullptr)
+        throw std::runtime_error(std::string("Component ") + name +
+                                 " is not an input");
+    in->getPin(1).setState(value);
+}
+
+Tristate Circuit::getOutput(const std::string& name) {
+    Component* comp = &getFromName(name);
+    Output* out = dynamic_cast<Output*>(comp);
+
+    if (out == nullptr)
+        throw std::runtime_error(std::string("Component ") + name +
+                                 " is not an output");
+    return out->getPin(1).getState();
+}
+
+const std::string& Circuit::getName(void) const { return _name; }
+
 }  // namespace nts

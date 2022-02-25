@@ -90,7 +90,7 @@ void Pin::setLink(Component &other, std::size_t otherPin) {
         std::unique_ptr<Link>(new Link(_component, _pin, other, otherPin)));
 }
 
-Component &Pin::getComponent(void) { return _component; }
+Component &Pin::getComponent(void) const { return _component; }
 
 std::size_t Pin::getPin(void) const { return _pin; }
 

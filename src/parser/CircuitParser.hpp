@@ -14,14 +14,14 @@ public:
     CircuitParser(const CircuitParser& other) = default;
     CircuitParser& operator=(const CircuitParser& other) = default;
 
-    Circuit& parse();
+    Circuit* parse();
 
 private:
     std::ifstream _stream;
     std::string _line;
     void parseChipsets();
     void parseLinks();
-    Circuit _circuit;
+    Circuit* _circuit;
 };
 
 }  // namespace nts

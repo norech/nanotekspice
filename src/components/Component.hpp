@@ -10,11 +10,10 @@ public:
 
 protected:
     PinMap _pins;
-    const std::string _name;
+    std::string _name;
 
 public:
     Component(const std::string& name = "Undefined");
-    ~Component(void) override = default;
 
     Component& addInputPin(std::size_t pin);
     Component& addOutputPin(std::size_t pin);

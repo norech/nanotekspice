@@ -13,7 +13,15 @@ namespace nts {
         name, [](const std::string& n) { return std::make_unique<type>(n); } \
     }
 
-class Circuit {
+#define NTS_COMPONENT_FROM_FILE(name, file)                        \
+    {                                                              \
+        name, [](const std::string& n) {                           \
+            CircuitParser circuitParser(file);                     \
+            return std::make_unique<Board>(circuitParser.parse()); \
+        }                                                          \
+    }
+
+class Circuit : public Component {
 public:
 private:
     std::map<std::string, std::unique_ptr<Component>> _components;
@@ -23,12 +31,17 @@ private:
                                         const std::string&)>>
         _factory;
 
+    std::string _name = "no name";
+
 protected:
 public:
-    Circuit(void);
+    Circuit(const std::string& name);
+
     ~Circuit(void) = default;
 
     void addComponent(const std::string& type, const std::string& name);
+
+    const std::string& getName(void) const;
 
     const std::map<std::string, std::unique_ptr<Component>>& getComponents(
         void) const;
@@ -38,6 +51,9 @@ public:
                  const std::string& rightComponent, std::size_t left);
 
     bool alreadyHasName(const std::string& name);
+
+    void setInput(const std::string& name, Tristate value);
+    Tristate getOutput(const std::string& name);
 
     void unvisit(void);
     void simulate(void);

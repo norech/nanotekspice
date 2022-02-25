@@ -12,7 +12,8 @@
 
 namespace nts {
 
-CircuitParser::CircuitParser(const std::string &file) {
+CircuitParser::CircuitParser(const std::string& file)
+    : _circuit(new Circuit(file)) {
     _stream.open(file);
     if (!_stream || _stream.bad()) {
         throw std::runtime_error("Error: cannot open input file");
@@ -44,7 +45,7 @@ void CircuitParser::parseChipsets() {
         if (ss.bad() || type.empty() || name.empty()) {
             throw std::runtime_error("Error: invalid chipset '" + _line + "'");
         }
-        _circuit.addComponent(type, name);
+        _circuit->addComponent(type, name);
     }
 }
 
@@ -78,11 +79,11 @@ void CircuitParser::parseLinks() {
             throw std::runtime_error("Error: invalid pin link '" + _line + "'");
         }
 
-        _circuit.setLink(name1, pin1Int, name2, pin2Int);
+        _circuit->setLink(name1, pin1Int, name2, pin2Int);
     }
 }
 
-Circuit &CircuitParser::parse() {
+Circuit* CircuitParser::parse() {
     while (std::getline(_stream, _line)) {
         _line = trim(_line.substr(0, _line.find('#')));
 

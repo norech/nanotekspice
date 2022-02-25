@@ -23,22 +23,22 @@ public:
 
 class And : public DualInputGate {
 public:
-    And(void);
+    And(const std::string& name = "AndGate");
 };
 
 class Xor : public DualInputGate {
 public:
-    Xor(void);
+    Xor(const std::string& name = "XorGate");
 };
 
 class Or : public DualInputGate {
 public:
-    Or(void);
+    Or(const std::string& name = "OrGate");
 };
 
 class Not : public Gate {
 public:
-    Not(void);
+    Not(const std::string& name = "NotGate");
 
     Tristate compute(std::size_t pin) override;
 };

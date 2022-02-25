@@ -17,6 +17,8 @@ private:
 public:
     Link(Component &originComponent, std::size_t originPin,
          Component &targetComponent, std::size_t targetPin);
+    Link(const Link &) = default;
+
     ~Link() = default;
 
     bool otherIsSelf(const Component &other) const;

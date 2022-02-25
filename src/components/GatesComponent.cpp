@@ -31,12 +31,15 @@ Tristate DualInputGate::compute(std::size_t pin) {
     return res;
 }
 
-And::And(void) : DualInputGate("AndGate", andGate) {}
+And::And(const std::string& name) : DualInputGate(name, andGate) {}
 
-Xor::Xor(void) : DualInputGate("xorGate", xorGate) {}
-Or::Or(void) : DualInputGate("Or", orGate) {}
+Xor::Xor(const std::string& name) : DualInputGate(name, xorGate) {}
 
-Not::Not(void) : Gate("Not") { addInputPin(1).addOutputPin(2); }
+Or::Or(const std::string& name) : DualInputGate(name, orGate) {}
+
+Not::Not(const std::string& name) : Gate(name) {
+    addInputPin(1).addOutputPin(2);
+}
 
 Tristate Not::compute(std::size_t pin) {
     // std::cout << "Not::compute(" << getName() << ", " << pin << ")" <<

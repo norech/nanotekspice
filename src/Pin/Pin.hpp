@@ -20,10 +20,12 @@ protected:
     PinType _type;
     bool _visited = false;
     Tristate _state = Tristate::UNDEFINED;
+    Component &_component;
 
 public:
-    Component &_component;
     Pin(Component &component, std::size_t pin, PinType type);
+    Pin(const Pin &other) = default;
+
     virtual ~Pin() = default;
 
     bool otherIsSelf(const Component &other) const;
@@ -43,7 +45,7 @@ public:
 
     Tristate update(Tristate state);
 
-    Component &getComponent(void);
+    Component &getComponent(void) const;
 
     std::size_t getPin(void) const;
 };
