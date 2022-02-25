@@ -1,7 +1,8 @@
 #include <iostream>
 
+#include "src/circuit/Circuit.hpp"
+#include "src/parser/CircuitParser.hpp"
 #include "src/parser/CommandParser.hpp"
-#include "src/parser/FileParser.hpp"
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -10,15 +11,15 @@ int main(int argc, char *argv[]) {
     }
 
     try {
-        nts::FileParser fp(argv[1]);
+        nts::CircuitParser circuitParser(argv[1]);
         nts::CommandParser cp;
         std::string cmd;
 
-        fp.parse();
+        nts::Circuit &circuit = circuitParser.parse();
         std::cout << "> ";
         while (std::getline(std::cin, cmd)) {
             try {
-                cp.parseCommand(cmd);
+                cp.parseCommand(circuit, cmd);
             } catch (std::runtime_error &e) {
                 if (std::string(e.what()) == "exit") return 0;
                 std::cerr << e.what() << std::endl;

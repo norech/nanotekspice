@@ -7,12 +7,12 @@
 
 namespace nts {
 
-class FileParser {
+class CircuitParser {
 public:
-    FileParser(const std::string& file);
-    ~FileParser();
-    FileParser(const FileParser& other) = default;
-    FileParser& operator=(const FileParser& other) = default;
+    CircuitParser(const std::string& file);
+    ~CircuitParser();
+    CircuitParser(const CircuitParser& other) = default;
+    CircuitParser& operator=(const CircuitParser& other) = default;
 
     Circuit& parse();
 
@@ -21,6 +21,7 @@ private:
     std::string _line;
     void parseChipsets();
     void parseLinks();
+    Circuit _circuit;
 };
 
 }  // namespace nts

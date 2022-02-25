@@ -8,8 +8,6 @@
 
 namespace nts {
 
-std::unique_ptr<Circuit> Circuit::circuit;
-
 Circuit::Circuit(void) {
     _factory.insert(NTS_COMPONENT_FACTORY("input", Input));
     _factory.insert(NTS_COMPONENT_FACTORY("clock", Clock));
@@ -25,14 +23,8 @@ Circuit::Circuit(void) {
     _factory.insert(NTS_COMPONENT_FACTORY("4008", Component4008));
 }
 
-Circuit& Circuit::getInstance(void) {
-    if (Circuit::circuit.get() == nullptr)
-        circuit = std::make_unique<Circuit>();
-    return *Circuit::circuit;
-}
-
 Component& Circuit::getFromName(const std::string& name) {
-    Circuit& circuit = Circuit::getInstance();
+    Circuit& circuit = *this;
     auto it = circuit._components.find(name);
 
     if (it == circuit._components.end())
@@ -42,7 +34,7 @@ Component& Circuit::getFromName(const std::string& name) {
 }
 
 bool Circuit::alreadyHasName(const std::string& name) {
-    const auto& components = Circuit::getInstance()._components;
+    const auto& components = this->_components;
     return components.find(name) != components.end();
 }
 
@@ -77,7 +69,7 @@ void Circuit::setLink(const std::string& leftComponent, std::size_t pinLeft,
 }
 
 void Circuit::addComponent(const std::string& type, const std::string& name) {
-    Circuit& circuit = Circuit::getInstance();
+    Circuit& circuit = *this;
 
     if (circuit.alreadyHasName(name)) {
         throw std::runtime_error(
@@ -91,7 +83,7 @@ void Circuit::addComponent(const std::string& type, const std::string& name) {
 }
 
 void Circuit::unvisit(void) {
-    Circuit& circuit = Circuit::getInstance();
+    Circuit& circuit = *this;
 
     for (auto& it : circuit._components) {
         for (auto& pin : it.second->getPins()) {
@@ -101,7 +93,7 @@ void Circuit::unvisit(void) {
 }
 
 void Circuit::simulate(void) {
-    Circuit& circuit = Circuit::getInstance();
+    Circuit& circuit = *this;
     circuit._tick++;
 
     Circuit::unvisit();
@@ -112,7 +104,7 @@ void Circuit::simulate(void) {
 }
 
 void Circuit::dump(void) {
-    Circuit& circuit = Circuit::getInstance();
+    Circuit& circuit = *this;
 
     for (auto& it : circuit._components) {
         it.second->dump();
@@ -120,9 +112,8 @@ void Circuit::dump(void) {
 }
 
 template <typename T>
-static void displayCircuitInfo(const std::string& name) {
+void displayCircuitInfo(Circuit& circuit, const std::string& name) {
     char state[2] = {'0', '1'};
-    Circuit& circuit = Circuit::getInstance();
 
     std::cout << name << ": " << std::endl;
     for (auto& it : circuit.getComponents()) {
@@ -139,11 +130,11 @@ static void displayCircuitInfo(const std::string& name) {
 }
 
 void Circuit::display(void) {
-    Circuit& circuit = Circuit::getInstance();
+    Circuit& circuit = *this;
 
     std::cout << "tick: " << circuit._tick << std::endl;
-    displayCircuitInfo<Input>("input(s)");
-    displayCircuitInfo<Output>("output(s)");
+    displayCircuitInfo<Input>(circuit, "input(s)");
+    displayCircuitInfo<Output>(circuit, "output(s)");
 }
 
 const std::map<std::string, std::unique_ptr<Component>>& Circuit::getComponents(
@@ -151,5 +142,5 @@ const std::map<std::string, std::unique_ptr<Component>>& Circuit::getComponents(
     return _components;
 }
 
-std::size_t Circuit::getTick(void) { return Circuit::getInstance()._tick; }
+std::size_t Circuit::getTick(void) { return _tick; }
 }  // namespace nts

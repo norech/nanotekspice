@@ -27,13 +27,13 @@ Tristate CommandParser::parseTristate(const std::string& state) {
     }
 }
 
-bool CommandParser::parseAssignation(const std::string& cmd) {
+bool CommandParser::parseAssignation(Circuit& circuit, const std::string& cmd) {
     if (cmd.find("=") == std::string::npos) {
         return false;
     }
     std::string name = cmd.substr(0, cmd.find("="));
     std::string value = cmd.substr(cmd.find("=") + 1);
-    Component& comp = Circuit::getFromName(name);
+    Component& comp = circuit.getFromName(name);
     Input* input = dynamic_cast<Input*>(&comp);
     if (input != nullptr) {
         input->setValue(parseTristate(value));
@@ -44,29 +44,29 @@ bool CommandParser::parseAssignation(const std::string& cmd) {
     return true;
 }
 
-void CommandParser::parseCommand(const std::string& command) {
+void CommandParser::parseCommand(Circuit& circuit, const std::string& command) {
     std::stringstream ss(command);
     std::string cmd;
     ss >> cmd;
     if (cmd == "simulate") {
-        Circuit::simulate();
+        circuit.simulate();
     }
     else if (cmd == "display") {
-        Circuit::display();
+        circuit.display();
     }
     else if (cmd == "loop") {
         while (true) {
-            Circuit::simulate();
-            Circuit::display();
+            circuit.simulate();
+            circuit.display();
         }
     }
     else if (cmd == "dump") {
-        Circuit::dump();
+        circuit.dump();
     }
     else if (cmd == "exit") {
         throw std::runtime_error("exit");
     }
-    else if (!parseAssignation(cmd)) {
+    else if (!parseAssignation(circuit, cmd)) {
         throw std::runtime_error("Invalid command");
     }
 }

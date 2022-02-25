@@ -1,4 +1,4 @@
-#include "FileParser.hpp"
+#include "CircuitParser.hpp"
 
 #include <algorithm>
 #include <cctype>
@@ -12,14 +12,14 @@
 
 namespace nts {
 
-FileParser::FileParser(const std::string &file) {
+CircuitParser::CircuitParser(const std::string &file) {
     _stream.open(file);
     if (!_stream || _stream.bad()) {
         throw std::runtime_error("Error: cannot open input file");
     }
 }
 
-FileParser::~FileParser() {}
+CircuitParser::~CircuitParser() {}
 
 static inline std::string trim(std::string s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char c) {
@@ -32,7 +32,7 @@ static inline std::string trim(std::string s) {
     return s;
 }
 
-void FileParser::parseChipsets() {
+void CircuitParser::parseChipsets() {
     while (std::getline(_stream, _line)) {
         _line = trim(_line.substr(0, _line.find('#')));
         if (_line.empty()) continue;
@@ -44,11 +44,11 @@ void FileParser::parseChipsets() {
         if (ss.bad() || type.empty() || name.empty()) {
             throw std::runtime_error("Error: invalid chipset '" + _line + "'");
         }
-        Circuit::addComponent(type, name);
+        _circuit.addComponent(type, name);
     }
 }
 
-void FileParser::parseLinks() {
+void CircuitParser::parseLinks() {
     while (std::getline(_stream, _line)) {
         _line = trim(_line.substr(0, _line.find('#')));
         if (_line.empty()) continue;
@@ -78,12 +78,11 @@ void FileParser::parseLinks() {
             throw std::runtime_error("Error: invalid pin link '" + _line + "'");
         }
 
-        Circuit &circuit = Circuit::getInstance();
-        circuit.setLink(name1, pin1Int, name2, pin2Int);
+        _circuit.setLink(name1, pin1Int, name2, pin2Int);
     }
 }
 
-Circuit &FileParser::parse() {
+Circuit &CircuitParser::parse() {
     while (std::getline(_stream, _line)) {
         _line = trim(_line.substr(0, _line.find('#')));
 
@@ -95,7 +94,7 @@ Circuit &FileParser::parse() {
             parseLinks();
         }
     }
-    return Circuit::getInstance();
+    return _circuit;
 }
 
 }  // namespace nts
