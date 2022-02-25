@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stack>
 #include <string>
 
 #include "../circuit/Circuit.hpp"
@@ -19,6 +20,8 @@ public:
 private:
     bool parseAssignation(Circuit& circuit, const std::string& cmd);
     Tristate parseTristate(const std::string& state);
+
+    std::stack<std::pair<std::string, Tristate>> _preSimulate;
 };
 
 }  // namespace nts

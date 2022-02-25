@@ -33,7 +33,11 @@ bool CommandParser::parseAssignation(Circuit& circuit, const std::string& cmd) {
     }
     std::string name = cmd.substr(0, cmd.find("="));
     std::string value = cmd.substr(cmd.find("=") + 1);
-    circuit.setInput(name, parseTristate(value));
+
+    // Just to throw an error in case of
+    circuit.getFromName(name);
+
+    _preSimulate.push({name, parseTristate(value)});
     return true;
 }
 
@@ -42,6 +46,9 @@ void CommandParser::parseCommand(Circuit& circuit, const std::string& command) {
     std::string cmd;
     ss >> cmd;
     if (cmd == "simulate") {
+        for (; _preSimulate.empty() == false; _preSimulate.pop())
+            circuit.setInput(_preSimulate.top().first,
+                             _preSimulate.top().second);
         circuit.simulate();
     }
     else if (cmd == "display") {
