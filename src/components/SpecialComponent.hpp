@@ -20,6 +20,9 @@ public:
 };
 
 class Clock : public Input {
+private:
+    bool _alreadyInvertedOnce = false;
+
 public:
     Clock(const std::string& name);
 

@@ -34,6 +34,9 @@ void Clock::simulate(void) {
     if (it->getState() == Tristate::UNDEFINED) {
         return;
     }
+    else if (_alreadyInvertedOnce == false) {
+        _alreadyInvertedOnce = true;
+    }
     else if (it->getState() == Tristate::FALSE) {
         it->setState(Tristate::TRUE);
     }
