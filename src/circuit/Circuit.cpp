@@ -15,6 +15,8 @@
 namespace nts {
 
 Circuit::Circuit(const std::string& name) : _name(name) {
+    _factory.insert(NTS_COMPONENT_FACTORY("_or", Or));
+    _factory.insert(NTS_COMPONENT_FACTORY("_not", Not));
     _factory.insert(NTS_COMPONENT_FACTORY("input", Input));
     _factory.insert(NTS_COMPONENT_FACTORY("clock", Clock));
     _factory.insert(NTS_COMPONENT_FACTORY("output", Output));
@@ -25,12 +27,12 @@ Circuit::Circuit(const std::string& name) : _name(name) {
     _factory.insert(NTS_COMPONENT_FACTORY("4011", Component4011));
     _factory.insert(NTS_COMPONENT_FACTORY("4030", Component4030));
     //_factory.insert(NTS_COMPONENT_FACTORY("4071", Component4071));
+    _factory.insert(NTS_COMPONENT_FACTORY_FN("4071", ComponentFactory::do4071));
+    _factory.insert(NTS_COMPONENT_FACTORY_FN("4069", ComponentFactory::do4069));
     _factory.insert(NTS_COMPONENT_FACTORY("4081", Component4081));
 
     _factory.insert(NTS_COMPONENT_FACTORY("HalfAdder", HalfAdder));
     _factory.insert(NTS_COMPONENT_FACTORY("FullAdder", FullAdder));
-    _factory.insert(NTS_COMPONENT_FACTORY("_or", Or));
-    _factory.insert(NTS_COMPONENT_FACTORY_FN("4071", ComponentFactory::do4071));
 }
 
 Component& Circuit::getFromName(const std::string& name) {
