@@ -13,6 +13,13 @@ namespace nts {
         name, [](const std::string& n) { return std::make_unique<type>(n); } \
     }
 
+#define NTS_COMPONENT_FACTORY_FN(name, fn)           \
+    {                                                \
+        name, [](const std::string& n) {             \
+            return std::unique_ptr<Component>(fn()); \
+        }                                            \
+    }
+
 #define NTS_COMPONENT_FROM_FILE(name, file)                        \
     {                                                              \
         name, [](const std::string& n) {                           \

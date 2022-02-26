@@ -12,7 +12,7 @@ private:
 
 protected:
 public:
-    Board(Circuit *circuit);
+    Board(Circuit* circuit);
 
     Tristate compute(std::size_t pin) override;
 };

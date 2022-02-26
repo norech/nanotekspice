@@ -7,6 +7,7 @@
 
 #include "../components/Board.hpp"
 #include "../components/Component.hpp"
+#include "../components/ComponentFactory.hpp"
 #include "../components/Components.hpp"
 #include "../components/SpecialComponent.hpp"
 #include "../parser/CircuitParser.hpp"
@@ -29,8 +30,7 @@ Circuit::Circuit(const std::string& name) : _name(name) {
     _factory.insert(NTS_COMPONENT_FACTORY("HalfAdder", HalfAdder));
     _factory.insert(NTS_COMPONENT_FACTORY("FullAdder", FullAdder));
     _factory.insert(NTS_COMPONENT_FACTORY("_or", Or));
-    _factory.insert(NTS_COMPONENT_FROM_FILE("or", "../components/or.nts"));
-    _factory.insert(NTS_COMPONENT_FROM_FILE("4071", "../components/4071.nts"));
+    _factory.insert(NTS_COMPONENT_FACTORY_FN("4071", ComponentFactory::do4071));
 }
 
 Component& Circuit::getFromName(const std::string& name) {
