@@ -122,7 +122,7 @@ template <typename T>
 void displayCircuitInfo(Circuit& circuit, const std::string& name) {
     char state[2] = {'0', '1'};
 
-    std::cout << name << ": " << std::endl;
+    std::cout << name << ":" << std::endl;
 
     std::vector<std::pair<std::string, char>> states;
 
