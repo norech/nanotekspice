@@ -86,6 +86,7 @@ void Pin::setLink(Component &other, std::size_t otherPin) {
     if (isLinkedTo(other, otherPin)) {
         return;
     }
+    _component.getPin(_pin).setState(other.getPin(otherPin).getState());
     _links.push_back(
         std::unique_ptr<Link>(new Link(_component, _pin, other, otherPin)));
 }
