@@ -8,24 +8,30 @@ namespace nts {
 
 // Specific Components
 
+class Logger : public Component {
+public:
+    Logger(const std::string& name = "Logger");
+
+    void simulate(void) override;
+};
+
 class HalfAdder : public Component {
 private:
     std::unique_ptr<Xor> _s = std::make_unique<Xor>();
     std::unique_ptr<And> _c = std::make_unique<And>();
 
 public:
-    HalfAdder(const std::string& name="HalfAdder");
+    HalfAdder(const std::string& name = "HalfAdder");
 };
 
 class FullAdder : public Component {
 private:
     std::array<std::unique_ptr<HalfAdder>, 2> _hadders = {
-        std::make_unique<HalfAdder>(), std::make_unique<HalfAdder>()
-    };
+        std::make_unique<HalfAdder>(), std::make_unique<HalfAdder>()};
     std::unique_ptr<Or> _cresult = std::make_unique<Or>();
 
 public:
-    FullAdder(const std::string& name="FullAdder");
+    FullAdder(const std::string& name = "FullAdder");
 };
 
 template <typename T>
@@ -94,11 +100,9 @@ public:
 class Component4008 : public Component {
 private:
     std::array<std::unique_ptr<FullAdder>, 4> _adders = {
-        std::make_unique<FullAdder>(),
-        std::make_unique<FullAdder>(),
-        std::make_unique<FullAdder>(),
-        std::make_unique<FullAdder>()
-    };
+        std::make_unique<FullAdder>(), std::make_unique<FullAdder>(),
+        std::make_unique<FullAdder>(), std::make_unique<FullAdder>()};
+
 public:
     Component4008(const std::string& name = "4008");
 };

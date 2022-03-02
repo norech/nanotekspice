@@ -17,6 +17,7 @@ namespace nts {
 Circuit::Circuit(const std::string& name) : _name(name) {
     _factory.insert(NTS_COMPONENT_FACTORY("_or", Or));
     _factory.insert(NTS_COMPONENT_FACTORY("_not", Not));
+    _factory.insert(NTS_COMPONENT_FACTORY("logger", Logger));
     _factory.insert(NTS_COMPONENT_FACTORY("input", Input));
     _factory.insert(NTS_COMPONENT_FACTORY("clock", Clock));
     _factory.insert(NTS_COMPONENT_FACTORY("output", Output));

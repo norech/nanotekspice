@@ -1,5 +1,8 @@
 #include "Components.hpp"
 
+#include <fstream>
+#include <iostream>
+
 namespace nts {
 Component4001::Component4001(const std::string& name)
     : GenericComponent7In5OutInternal(name) {}
@@ -25,6 +28,50 @@ HalfAdder::HalfAdder(const std::string& name) : Component(name) {
     _c->setLink(2, *this, 2);
     _s->setLink(1, *this, 1);
     _s->setLink(2, *this, 2);
+}
+
+Logger::Logger(const std::string& name) : Component(name) {
+    addInputPin(1)
+        .addInputPin(2)
+        .addInputPin(3)
+        .addInputPin(4)
+        .addInputPin(5)
+        .addInputPin(6)
+        .addInputPin(7)
+        .addInputPin(8)
+        .addInputPin(9)
+        .addInputPin(10);
+}
+
+void Logger::simulate() {
+    Component::simulate();
+
+    if (this->compute(10) != TRUE)  // inhibit pin
+        return;
+    if (this->compute(9) != TRUE)  // clock pin
+        return;
+
+    Tristate state;
+    char value = 0;
+    bool unknown = false;
+    for (int i = 8; i >= 0; i--) {
+        state = this->compute(i + 1);
+        if (state == UNDEFINED) {
+            unknown = true;
+            state = FALSE;
+        }
+        value = (value << 1) + state;
+    }
+    std::ofstream logfile("./log.bin", std::ios_base::app);
+    if (logfile.bad()) {
+        std::cerr << "Error: cannot open log file" << std::endl;
+        return;
+    }
+    if (unknown) {
+        std::cerr << "Warning: unknown value" << std::endl;
+    }
+    logfile.write(&value, 1);
+    logfile.close();
 }
 
 FullAdder::FullAdder(const std::string& name) : Component(name) {
@@ -58,16 +105,13 @@ Component4008::Component4008(const std::string& name) : Component(name) {
     for (int i = 0; i < outPins.size(); i++) addOutputPin(outPins[i]);
 
     // set all inputs (not carry)
-    const std::vector<std::pair<std::size_t, std::size_t>> inputs = { 
-        {15, 1}, {2, 3}, {4, 5}, {6, 7}
-    };
+    const std::vector<std::pair<std::size_t, std::size_t>> inputs = {
+        {15, 1}, {2, 3}, {4, 5}, {6, 7}};
     for (int i = 0; i < inputs.size(); i++) {
         _adders[_adders.size() - 1 - i]->setLink(1, *this, inputs[i].first);
         _adders[_adders.size() - 1 - i]->setLink(2, *this, inputs[i].second);
     }
-    const std::vector<std::size_t> outputs = {
-        13, 12, 11, 10
-    };
+    const std::vector<std::size_t> outputs = {13, 12, 11, 10};
     for (int i = 0; i < outputs.size(); i++) {
         this->setLink(outputs[i], *_adders[_adders.size() - i - 1], 4);
     }
@@ -78,7 +122,8 @@ Component4008::Component4008(const std::string& name) : Component(name) {
     _adders[0]->setLink(3, *this, 9);
     // set all carrys in adders
     for (int i = 0; i < _adders.size() - 1; i++) {
-        _adders[_adders.size() - 1 - i]->setLink(3, *_adders[_adders.size() - 2 - i], 5);
+        _adders[_adders.size() - 1 - i]->setLink(
+            3, *_adders[_adders.size() - 2 - i], 5);
     }
 }
 
