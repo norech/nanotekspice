@@ -57,12 +57,14 @@ Output::Output(const std::string& name) : SpecialComponent(name) {
 
 True::True(const std::string& name) : SpecialComponent(name) {
     addOutputPin(1);
+    getPin(1).setState(TRUE);
 }
 
 Tristate True::compute(size_t pin) { return TRUE; }
 
 False::False(const std::string& name) : SpecialComponent(name) {
     addOutputPin(1);
+    getPin(1).setState(FALSE);
 }
 
 Tristate False::compute(size_t pin) { return FALSE; }
