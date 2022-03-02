@@ -32,6 +32,8 @@ public:
 
     void dump(void) const override;
 
+    virtual void onPinChanged(size_t pin) {}
+
     Tristate compute(std::size_t pin) override;
 };
 

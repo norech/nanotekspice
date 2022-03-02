@@ -45,6 +45,12 @@ void Clock::simulate(void) {
     }
 }
 
+void Clock::onPinChanged(size_t pin) {
+    if (pin == 1) {
+        _alreadyInvertedOnce = false;
+    }
+}
+
 Output::Output(const std::string& name) : SpecialComponent(name) {
     addInputPin(1);
 }

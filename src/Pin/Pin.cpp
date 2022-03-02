@@ -25,6 +25,7 @@ bool Pin::isLinkedTo(const Component &other, std::size_t pin) const {
 PinType Pin::getType(void) const { return _type; }
 Tristate Pin::getState(void) const { return _state; }
 Pin &Pin::setState(Tristate state) {
+    _component.onPinChanged(_pin);
     _state = state;
     return *this;
 }

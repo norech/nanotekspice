@@ -26,6 +26,8 @@ private:
 public:
     Clock(const std::string& name);
 
+    void onPinChanged(size_t pin) override;
+
     void simulate(void) override;
 };
 
