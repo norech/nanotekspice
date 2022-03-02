@@ -84,16 +84,23 @@ void CircuitParser::parseLinks() {
 }
 
 Circuit* CircuitParser::parse() {
+    bool hasChipsets = false;
+    bool hasLinks = false;
     while (std::getline(_stream, _line)) {
         _line = trim(_line.substr(0, _line.find('#')));
 
         if (_line.empty()) continue;
         if (_line.find(".chipsets:") == 0) {
+            hasChipsets = true;
             parseChipsets();
         }
         if (_line.find(".links:") == 0) {
+            hasLinks = true;
             parseLinks();
         }
+    }
+    if (!hasChipsets || !hasLinks) {
+        throw std::runtime_error("Error: missing chipsets or links section");
     }
     return _circuit;
 }
