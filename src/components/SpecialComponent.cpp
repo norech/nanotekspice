@@ -55,12 +55,16 @@ Output::Output(const std::string& name) : SpecialComponent(name) {
     addInputPin(1);
 }
 
-Boolean::Boolean(const std::string& name, bool value) : SpecialComponent(name) {
+True::True(const std::string& name) : SpecialComponent(name) {
     addOutputPin(1);
-    _pins[1]->setState(value ? TRUE : FALSE);
 }
 
-True::True(const std::string& name) : Boolean(name, true) {}
+Tristate True::compute(size_t pin) { return TRUE; }
 
-False::False(const std::string& name) : Boolean(name, false) {}
+False::False(const std::string& name) : SpecialComponent(name) {
+    addOutputPin(1);
+}
+
+Tristate False::compute(size_t pin) { return FALSE; }
+
 };  // namespace nts

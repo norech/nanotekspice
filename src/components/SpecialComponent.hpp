@@ -36,19 +36,16 @@ public:
     Output(const std::string& name);
 };
 
-class Boolean : public SpecialComponent {
-protected:
-    Boolean(const std::string& name, bool value);
-};
-
-class True : public Boolean {
+class True : public SpecialComponent {
 public:
     True(const std::string& name);
+    Tristate compute(std::size_t pin) override;
 };
 
-class False : public Boolean {
+class False : public SpecialComponent {
 public:
     False(const std::string& name);
+    Tristate compute(std::size_t pin) override;
 };
 
 }  // namespace nts
