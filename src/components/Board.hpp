@@ -15,6 +15,8 @@ public:
     Board(Circuit* circuit);
 
     Tristate compute(std::size_t pin) override;
+
+    void simulate(void) override;
 };
 
 }  // namespace nts

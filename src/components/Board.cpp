@@ -12,6 +12,8 @@ Board::Board(Circuit* circuit)
         }
     }
 }
+void Board::simulate() { _circuit->simulate(); }
+
 Tristate Board::compute(std::size_t pinIndex) {
     if (getPin(pinIndex).getType() == OUTPUT) {
         for (auto& it : _pins) {
@@ -21,7 +23,6 @@ Tristate Board::compute(std::size_t pinIndex) {
                                    pin.compute());
             }
         }
-        _circuit->simulate();
         return _circuit->getOutput("out_" + std::to_string(pinIndex));
     }
     else {
