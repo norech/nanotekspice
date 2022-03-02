@@ -25,6 +25,10 @@ public:
 };
 
 class FullAdder : public Component {
+// FullAdder logic
+// 1: in1, 2: in2
+// 3: cin, 4: sum
+// 5: cout
 private:
     std::array<std::unique_ptr<HalfAdder>, 2> _hadders = {
         std::make_unique<HalfAdder>(), std::make_unique<HalfAdder>()};
@@ -105,6 +109,33 @@ private:
 
 public:
     Component4008(const std::string& name = "4008");
+};
+
+class DFlipFlopWithSetAndReset : public Component {
+private:
+    std::unique_ptr<Nand> _q = std::make_unique<Nand>();
+    std::unique_ptr<Nand> _nq = std::make_unique<Nand>();
+
+    std::array<std::unique_ptr<Nand>, 4> _ins = {
+        std::make_unique<Nand>(), std::make_unique<Nand>(),
+        std::make_unique<Nand>(), std::make_unique<Nand>()
+    };
+
+public:
+    // Pin1: Set, Pin2: Clock
+    // Pin3: Data, Pin4: Reset
+    // Pin5: Q, Pin6: ~Q
+    DFlipFlopWithSetAndReset(const std::string& name = "DFlipFlopWithSetAndReset");
+};
+
+class Component4013 : public Component {
+private:
+    std::array<std::unique_ptr<DFlipFlopWithSetAndReset>, 2> _latches = {
+        std::make_unique<DFlipFlopWithSetAndReset>(),
+        std::make_unique<DFlipFlopWithSetAndReset>()
+    };
+public:
+    Component4013(const std::string& name = "Component4013");
 };
 
 }  // namespace nts
