@@ -46,7 +46,7 @@ Logger::Logger(const std::string& name) : Component(name) {
 void Logger::simulate() {
     Component::simulate();
 
-    if (this->compute(10) != TRUE)  // inhibit pin
+    if (this->compute(10) != FALSE)  // inhibit pin
         return;
     if (this->compute(9) != TRUE)  // clock pin
         return;
