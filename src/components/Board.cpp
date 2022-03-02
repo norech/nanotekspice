@@ -23,6 +23,7 @@ Tristate Board::compute(std::size_t pinIndex) {
                                    pin.compute());
             }
         }
+        _circuit->simulate();
         return _circuit->getOutput("out_" + std::to_string(pinIndex));
     }
     else {
