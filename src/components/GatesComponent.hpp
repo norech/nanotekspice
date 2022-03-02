@@ -53,10 +53,10 @@ public:
     InputReverter(const std::string& name = "InputReverter") : Gate(name) {
         addInputPin(1).addInputPin(2).addOutputPin(3);
 
-        this->setLink(1, *_gate, 1);
-        this->setLink(2, *_gate, 2);
-        _gate->setLink(3, *_not, 1);
-        _not->setLink(2, *this, 3);
+        this->setLink(3, *_not, 2);
+        _not->setLink(1, *_gate, 3);
+        _gate->setLink(1, *this, 1);
+        _gate->setLink(2, *this, 2);
     }
 };
 
