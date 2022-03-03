@@ -107,7 +107,7 @@ Component& Circuit::addComponent(const std::string& type,
                                  const std::string& alias) {
     Component& component = addComponent(type, name);
 
-    _aliases[name] = &component;
+    _aliases[alias] = &component;
     return component;
 }
 
