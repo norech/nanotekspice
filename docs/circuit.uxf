@@ -1,0 +1,38 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>0</x><y>10</y><w>560</w><h>560</h></coordinates><panel_attributes>nts::Circuit
+--
++std::map&lt;std::string, std::unique_ptr&lt;Component&gt;&gt; _components;
+
++std::map&lt;std::string, Component*&gt; _aliases;
+
++std::size_t _tick = 0;
+
++std::string _name = "no name";
+--
++Component&amp; addComponent(const std::string&amp; type, const std::string&amp; name, const std::string&amp; alias);
+
++Component&amp; addComponent(const std::string&amp; type, const std::string&amp; name);
+
++const std::string&amp; getName(void) const;
+
++const std::map&lt;std::string, std::unique_ptr&lt;Component&gt;&gt;&amp; getComponents(void) const;
+
++Component&amp; getFromName(const std::string&amp; name);
+ 
++void setLink(const std::string&amp; leftComponent, std::size_t pinLeft,
+    const std::string&amp; rightComponent, std::size_t left);
+
++bool alreadyHasName(const std::string&amp; name);
+
++void setInput(const std::string&amp; name, Tristate value);
+
++Tristate getOutput(const std::string&amp; name);
+
++void unvisit(void);
+
++void simulate(void);
+
++void dump(void);
+
++void display(void);
+
++std::size_t getTick(void);</panel_attributes><additional_attributes></additional_attributes></element></diagram>

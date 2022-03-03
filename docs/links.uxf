@@ -1,0 +1,17 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>30</x><y>70</y><w>360</w><h>260</h></coordinates><panel_attributes>nts::Link
+--
++bool otherIsSelf(const Component &amp;other) const;
+
++bool isLinkedTo(const Component &amp;other, std::size_t pin) const;
+
++Component &amp;getTargetComponent(void);
+
++std::size_t getTargetPinIndex(void) const;
+
++Pin &amp;getTargetPin(void) const;
+
++Component &amp;getOriginComponent(void);
+
++std::size_t getOriginPinIndex(void) const;
+
++Pin &amp;getOriginPin(void) const;</panel_attributes><additional_attributes></additional_attributes></element></diagram>

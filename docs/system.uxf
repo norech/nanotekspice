@@ -1,0 +1,71 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>480</x><y>140</y><w>160</w><h>90</h></coordinates><panel_attributes>nts::CircuitParser
+--
+-std::ifstream _stream;
+-Circuit* _circuit;
+--
++Circuit* parse();</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>60</x><y>140</y><w>390</w><h>50</h></coordinates><panel_attributes>nts::CommandParser
+--
++void parseCommand(Circuit&amp; circuit, const std::string&amp; command);</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>730</y><w>360</w><h>130</h></coordinates><panel_attributes>/nts::Pin/
+--
+-std::vector&lt;std::unique_ptr&lt;Link&gt;&gt; _links;
+--
++Tristate compute(void);
+
++const std::vector&lt;std::unique_ptr&lt;Link&gt;&gt; &amp;getLinks(void) const;
+
++void setLink(Component &amp;other, std::size_t otherPin);</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>90</x><y>930</y><w>210</w><h>80</h></coordinates><panel_attributes>nts::Link
+--
++Pin &amp;getTargetPin(void) const;
+
++Pin &amp;getOriginPin(void) const;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>205</x><y>301</y><w>560</w><h>330</h></coordinates><panel_attributes>nts::Circuit
+--
++std::map&lt;std::string, std::unique_ptr&lt;Component&gt;&gt; _components;
++std::size_t _tick = 0;
+--
++Component&amp; addComponent(const std::string&amp; type, const std::string&amp; name);
+ 
++void setLink(const std::string&amp; leftComponent, std::size_t pinLeft,
+    const std::string&amp; rightComponent, std::size_t left);
+
++void setInput(const std::string&amp; name, Tristate value);
+
++Tristate getOutput(const std::string&amp; name);
+
++void simulate(void);
+
++void dump(void);
+
++void display(void);
+
++std::size_t getTick(void);</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>437</x><y>706</y><w>270</w><h>240</h></coordinates><panel_attributes>nts::Component
+--
+-PinMap _pins
+-std::string _name;
+--
++void setLink(std::size_t pin, IComponent&amp; other, std::size_t otherPin) override;
+
++Pin&amp; getPin(std::size_t pin);
+
++const std::string&amp; getName(void) const;
+
++void simulate(void);
+
++void dump(void) const;
+
++Tristate compute(std::size_t pin);
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>720</y><w>100</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;.
+&lt;&lt;include&gt;&gt;</panel_attributes><additional_attributes>10;20;80;20</additional_attributes></element><element><id>Relation</id><coordinates><x>190</x><y>850</y><w>80</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;.&gt;&gt;
+&lt;&lt;include&gt;&gt;</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>564</x><y>624</y><w>60</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-
+&lt;&lt;use&gt;&gt;</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>528</x><y>220</y><w>90</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-
+&lt;&lt;includes&gt;&gt;</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>808</x><y>764</y><w>270</w><h>140</h></coordinates><panel_attributes>nts::Board
+--
+-std::unique_ptr&lt;nts::Circuit&gt; _circuit;
+--
++Tristate compute(std::size_t pin) override;
+
++void simulate(void) override;
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>700</x><y>810</y><w>130</w><h>40</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;instanceOf&gt;&gt;</panel_attributes><additional_attributes>10;20;110;20</additional_attributes></element><element><id>Relation</id><coordinates><x>750</x><y>620</y><w>110</w><h>160</h></coordinates><panel_attributes>lt=&lt;-
+&lt;&lt;create&gt;&gt;</panel_attributes><additional_attributes>10;10;70;140</additional_attributes></element><element><id>UMLClass</id><coordinates><x>380</x><y>40</y><w>100</w><h>30</h></coordinates><panel_attributes>Application</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>430</x><y>60</y><w>80</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>60;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>340</x><y>60</y><w>90</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-
+</panel_attributes><additional_attributes>10;80;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>180</y><w>80</w><h>140</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;control&gt;&gt;</panel_attributes><additional_attributes>10;120;10;10</additional_attributes></element><element><id>UMLActor</id><coordinates><x>40</x><y>20</y><w>60</w><h>110</h></coordinates><panel_attributes>User</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>80</x><y>50</y><w>140</w><h>110</h></coordinates><panel_attributes>&lt;&lt;input&gt;&gt;</panel_attributes><additional_attributes>120;90;10;10</additional_attributes></element></diagram>
