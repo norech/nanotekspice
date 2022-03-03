@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 
+#include "../Error.hpp"
 #include "../circuit/Circuit.hpp"
 
 namespace nts {

@@ -3,6 +3,7 @@
 #include <exception>
 #include <sstream>
 
+#include "../Error.hpp"
 #include "../circuit/Circuit.hpp"
 #include "../components/SpecialComponent.hpp"
 
@@ -23,7 +24,7 @@ Tristate CommandParser::parseTristate(const std::string& state) {
         return UNDEFINED;
     }
     else {
-        throw std::runtime_error("Invalid value");
+        throw RuntimeError("Invalid value");
     }
 }
 
@@ -64,10 +65,10 @@ void CommandParser::parseCommand(Circuit& circuit, const std::string& command) {
         circuit.dump();
     }
     else if (cmd == "exit") {
-        throw std::runtime_error("exit");
+        throw RuntimeError("exit");
     }
     else if (!parseAssignation(circuit, cmd)) {
-        throw std::runtime_error("Invalid command");
+        throw RuntimeError("Invalid command");
     }
 }
 

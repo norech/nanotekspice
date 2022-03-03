@@ -16,7 +16,7 @@ CircuitParser::CircuitParser(const std::string& file)
     : _circuit(new Circuit(file)) {
     _stream.open(file);
     if (!_stream || _stream.bad()) {
-        throw std::runtime_error("Error: cannot open input file");
+        throw FatalError("Error: cannot open input file");
     }
 }
 
@@ -43,7 +43,7 @@ void CircuitParser::parseChipsets() {
         std::string name;
         ss >> type >> name;
         if (ss.bad() || type.empty() || name.empty()) {
-            throw std::runtime_error("Error: invalid chipset '" + _line + "'");
+            throw FatalError("Error: invalid chipset '" + _line + "'");
         }
         _circuit->addComponent(type, name);
     }
@@ -61,7 +61,7 @@ void CircuitParser::parseLinks() {
         ss >> pinPair1 >> pinPair2;
         if (ss.bad() || pinPair1.find(":") == std::string::npos ||
             pinPair2.find(":") == std::string::npos) {
-            throw std::runtime_error("Error: invalid link '" + _line + "'");
+            throw FatalError("Error: invalid link '" + _line + "'");
         }
 
         const std::string name1 = pinPair1.substr(0, pinPair1.find(':'));
@@ -76,7 +76,7 @@ void CircuitParser::parseLinks() {
         ssPin1 >> pin1Int;
         ssPin2 >> pin2Int;
         if (name1.empty() || name2.empty() || ssPin1.bad() || ssPin2.bad()) {
-            throw std::runtime_error("Error: invalid pin link '" + _line + "'");
+            throw FatalError("Error: invalid pin link '" + _line + "'");
         }
 
         _circuit->setLink(name1, pin1Int, name2, pin2Int);
@@ -100,7 +100,7 @@ Circuit* CircuitParser::parse() {
         }
     }
     if (!hasChipsets || !hasLinks) {
-        throw std::runtime_error("Error: missing chipsets or links section");
+        throw FatalError("Error: missing chipsets or links section");
     }
     return _circuit;
 }

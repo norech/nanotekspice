@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "../Error.hpp"
 #include "../circuit/Circuit.hpp"
 #include "GatesComponent.hpp"
 
@@ -32,8 +33,8 @@ Pin& Component::getPin(std::size_t pin) {
     auto it = _pins.find(pin);
 
     if (it == _pins.end())
-        throw std::runtime_error(std::string("Cannot find pin: ") +
-                                 std::to_string(pin));
+        throw FatalError(std::string("Cannot find pin: ") +
+                         std::to_string(pin));
     return *it->second;
 }
 

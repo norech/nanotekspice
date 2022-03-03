@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 
+#include "../Error.hpp"
 #include "../components/Board.hpp"
 #include "../components/Component.hpp"
 #include "../components/ComponentFactory.hpp"
@@ -58,9 +59,8 @@ Component& Circuit::getFromName(const std::string& name) {
     if (it == _components.end()) {
         auto it2 = _aliases.find(name);
         if (it2 == _aliases.end())
-        throw std::runtime_error(std::string("Circuit '") + _name +
-                                 "' does not contain a component named " +
-                                 name);
+            throw FatalError(std::string("Circuit '") + _name +
+                             "' does not contain a component named " + name);
         return *it2->second;
     }
     return *it->second;
@@ -82,7 +82,7 @@ void Circuit::setLink(const std::string& leftComponent, std::size_t pinLeft,
 
     // NOTE: this cannot work because of the requirements
     /*if (left.getName() == right.getName()) {
-        throw std::runtime_error("Cannot linked component to itself");
+        throw FatalError("Cannot linked component to itself");
     }*/
     const auto& pin1 = left.getPin(pinLeft);
     const auto& pin2 = right.getPin(pinRight);
@@ -94,7 +94,7 @@ void Circuit::setLink(const std::string& leftComponent, std::size_t pinLeft,
         left.setLink(pinLeft, right, pinRight);
     }
     else {
-        throw std::runtime_error(
+        throw FatalError(
             std::string("Cannot link two pins of the same type '") +
             leftComponent + " " + std::to_string(pin1.getPin()) + "' and '" +
             rightComponent + " " + std::to_string(pin2.getPin()) + "'" +
@@ -114,12 +114,10 @@ Component& Circuit::addComponent(const std::string& type,
 Component& Circuit::addComponent(const std::string& type,
                                  const std::string& name) {
     if (alreadyHasName(name)) {
-        throw std::runtime_error(
-            "Cannot add twice a component with the same name");
+        throw FatalError("Cannot add twice a component with the same name");
     }
     if (_factory.find(type) == _factory.end()) {
-        throw std::runtime_error(std::string("Unknown component type: ") +
-                                 type);
+        throw FatalError(std::string("Unknown component type: ") + type);
     }
     _components[name] = std::move(_factory[type](name));
     return *_components[name];
@@ -198,8 +196,7 @@ void Circuit::setInput(const std::string& name, Tristate value) {
     Input* in = dynamic_cast<Input*>(comp);
 
     if (in == nullptr)
-        throw std::runtime_error(std::string("Component ") + name +
-                                 " is not an input");
+        throw FatalError(std::string("Component ") + name + " is not an input");
     in->getPin(1).setState(value);
 }
 
@@ -208,8 +205,8 @@ Tristate Circuit::getOutput(const std::string& name) {
     Output* out = dynamic_cast<Output*>(comp);
 
     if (out == nullptr)
-        throw std::runtime_error(std::string("Component ") + name +
-                                 " is not an output");
+        throw FatalError(std::string("Component ") + name +
+                         " is not an output");
     return out->getPin(1).getState();
 }
 
