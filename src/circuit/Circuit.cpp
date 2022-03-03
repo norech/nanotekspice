@@ -15,23 +15,39 @@
 namespace nts {
 
 Circuit::Circuit(const std::string& name) : _name(name) {
+    // Gates
+    _factory.insert(NTS_COMPONENT_FACTORY("_and", And));
+    _factory.insert(NTS_COMPONENT_FACTORY("_xor", Xor));
     _factory.insert(NTS_COMPONENT_FACTORY("_or", Or));
     _factory.insert(NTS_COMPONENT_FACTORY("_not", Not));
-    _factory.insert(NTS_COMPONENT_FACTORY("logger", Logger));
+    _factory.insert(NTS_COMPONENT_FACTORY("_nand", Nand));
+    _factory.insert(NTS_COMPONENT_FACTORY("_nor", Xnor));
+    _factory.insert(NTS_COMPONENT_FACTORY("_xnor", Nor));
+
+    // Specials components
     _factory.insert(NTS_COMPONENT_FACTORY("input", Input));
     _factory.insert(NTS_COMPONENT_FACTORY("clock", Clock));
     _factory.insert(NTS_COMPONENT_FACTORY("output", Output));
     _factory.insert(NTS_COMPONENT_FACTORY("true", True));
     _factory.insert(NTS_COMPONENT_FACTORY("false", False));
+
+    // 4000 Series
     _factory.insert(NTS_COMPONENT_FACTORY("4001", Component4001));
     _factory.insert(NTS_COMPONENT_FACTORY("4008", Component4008));
     _factory.insert(NTS_COMPONENT_FACTORY("4011", Component4011));
+    _factory.insert(NTS_COMPONENT_FACTORY("4013", Component4013));
     _factory.insert(NTS_COMPONENT_FACTORY("4030", Component4030));
-    //_factory.insert(NTS_COMPONENT_FACTORY("4071", Component4071));
-    _factory.insert(NTS_COMPONENT_FACTORY_FN("4071", ComponentFactory::do4071));
     _factory.insert(NTS_COMPONENT_FACTORY_FN("4069", ComponentFactory::do4069));
+    _factory.insert(NTS_COMPONENT_FACTORY("4071", Component4071));
     _factory.insert(NTS_COMPONENT_FACTORY("4081", Component4081));
 
+    //_factory.insert(NTS_COMPONENT_FACTORY("4069", Component4069));
+    //_factory.insert(NTS_COMPONENT_FACTORY_FN("4071", ComponentFactory::do4071));
+
+    // Specific Logging component
+    _factory.insert(NTS_COMPONENT_FACTORY("logger", Logger));
+
+    // Intermediate components
     _factory.insert(NTS_COMPONENT_FACTORY("HalfAdder", HalfAdder));
     _factory.insert(NTS_COMPONENT_FACTORY("FullAdder", FullAdder));
 }

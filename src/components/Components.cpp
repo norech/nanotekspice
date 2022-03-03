@@ -91,12 +91,6 @@ FullAdder::FullAdder(const std::string& name) : Component(name) {
     _hadders[0]->setLink(2, *this, 2);
 }
 
-// FullAdder logic
-// 1: in1
-// 2: in2
-// 3: cin
-// 4: sum
-// 5: cout
 Component4008::Component4008(const std::string& name) : Component(name) {
     const std::vector<std::size_t> inPins = {15, 1, 2, 3, 4, 5, 6, 7, 9};
     const std::vector<std::size_t> outPins = {14, 13, 12, 11, 10};
@@ -125,6 +119,76 @@ Component4008::Component4008(const std::string& name) : Component(name) {
         _adders[_adders.size() - 1 - i]->setLink(
             3, *_adders[_adders.size() - 2 - i], 5);
     }
+}
+
+DFlipFlopWithSetAndReset::DFlipFlopWithSetAndReset(const std::string& name)
+    : Component(name) {
+    addInputPin(1).addInputPin(2).addInputPin(3).addInputPin(4);
+    addOutputPin(5).addOutputPin(6);
+
+    this->setLink(5, *_q, 3);
+    this->setLink(6, *_nq, 3);
+
+    _q->setLink(1, *this, 1);
+    _q->setLink(1, *_ins[1], 3);
+    _q->setLink(2, *_nq, 3);
+
+    _nq->setLink(1, *_q, 3);
+    _nq->setLink(1, *_ins[2], 3);
+    _nq->setLink(2, *this, 4);
+
+    _ins[0]->setLink(1, *this, 1);
+    _ins[0]->setLink(1, *_ins[3], 3);
+    _ins[0]->setLink(2, *_ins[1], 3);
+
+    _ins[1]->setLink(1, *_ins[0], 3);
+    _ins[1]->setLink(1, *this, 2);
+    _ins[1]->setLink(2, *this, 4);
+
+    _ins[2]->setLink(1, *_ins[1], 3);
+    _ins[2]->setLink(1, *this, 2);
+    _ins[2]->setLink(2, *_ins[3], 3);
+
+    _ins[3]->setLink(1, *_ins[2], 3);
+    _ins[3]->setLink(1, *this, 3);
+    _ins[3]->setLink(2, *this, 4);
+}
+
+Component4013::Component4013(const std::string& name) : Component(name) {
+    addInputPin(3)
+        .addInputPin(5)
+        .addInputPin(6)
+        .addInputPin(4)
+        .addInputPin(9)
+        .addInputPin(8)
+        .addInputPin(10)
+        .addInputPin(11)
+        .addOutputPin(1)
+        .addOutputPin(2)
+        .addOutputPin(13)
+        .addOutputPin(12);
+
+    // Set outs
+    this->setLink(1, *_latches[0], 5);
+    this->setLink(2, *_latches[0], 6);
+    this->setLink(13, *_latches[1], 5);
+    this->setLink(12, *_latches[1], 6);
+
+    // Set clocks
+    _latches[0]->setLink(2, *this, 3);
+    _latches[0]->setLink(2, *this, 11);
+
+    // Set Datas
+    _latches[0]->setLink(3, *this, 5);
+    _latches[1]->setLink(3, *this, 9);
+
+    // Set sets
+    _latches[0]->setLink(1, *this, 6);
+    _latches[1]->setLink(1, *this, 8);
+
+    // Set resets
+    _latches[0]->setLink(4, *this, 4);
+    _latches[1]->setLink(4, *this, 10);
 }
 
 }  // namespace nts
