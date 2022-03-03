@@ -32,6 +32,7 @@ class Circuit : public Component {
 public:
 private:
     std::map<std::string, std::unique_ptr<Component>> _components;
+    std::map<std::string, Component*> _aliases;
     std::size_t _tick = 0;
 
     std::unordered_map<std::string, std::function<std::unique_ptr<Component>(
@@ -46,7 +47,10 @@ public:
 
     ~Circuit(void) = default;
 
-    void addComponent(const std::string& type, const std::string& name);
+    Component& addComponent(const std::string& type, const std::string& name,
+                            const std::string& alias);
+
+    Component& addComponent(const std::string& type, const std::string& name);
 
     const std::string& getName(void) const;
 

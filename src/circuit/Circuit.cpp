@@ -39,15 +39,20 @@ Circuit::Circuit(const std::string& name) : _name(name) {
 Component& Circuit::getFromName(const std::string& name) {
     auto it = _components.find(name);
 
-    if (it == _components.end())
+    if (it == _components.end()) {
+        auto it2 = _aliases.find(name);
+        if (it2 == _aliases.end())
         throw std::runtime_error(std::string("Circuit '") + _name +
                                  "' does not contain a component named " +
                                  name);
+        return *it2->second;
+    }
     return *it->second;
 }
 
 bool Circuit::alreadyHasName(const std::string& name) {
-    return _components.find(name) != _components.end();
+    return _components.find(name) != _components.end() ||
+           _aliases.find(name) != _aliases.end();
 }
 
 void Circuit::setLink(const std::string& leftComponent, std::size_t pinLeft,
@@ -81,7 +86,17 @@ void Circuit::setLink(const std::string& leftComponent, std::size_t pinLeft,
     }
 }
 
-void Circuit::addComponent(const std::string& type, const std::string& name) {
+Component& Circuit::addComponent(const std::string& type,
+                                 const std::string& name,
+                                 const std::string& alias) {
+    Component& component = addComponent(type, name);
+
+    _aliases[name] = &component;
+    return component;
+}
+
+Component& Circuit::addComponent(const std::string& type,
+                                 const std::string& name) {
     if (alreadyHasName(name)) {
         throw std::runtime_error(
             "Cannot add twice a component with the same name");
@@ -91,6 +106,7 @@ void Circuit::addComponent(const std::string& type, const std::string& name) {
                                  type);
     }
     _components[name] = std::move(_factory[type](name));
+    return *_components[name];
 }
 
 void Circuit::unvisit(void) {
