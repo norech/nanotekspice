@@ -65,7 +65,7 @@ void CommandParser::parseCommand(Circuit& circuit, const std::string& command) {
         circuit.dump();
     }
     else if (cmd == "exit") {
-        throw RuntimeError("exit");
+        throw FatalError("exit");
     }
     else if (!parseAssignation(circuit, cmd)) {
         throw RuntimeError("Invalid command");
