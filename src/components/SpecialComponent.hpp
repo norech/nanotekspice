@@ -16,7 +16,7 @@ public:
 class Input : public SpecialComponent {
 public:
     Input(const std::string& name);
-    void setValue(Tristate value);
+    virtual void setValue(Tristate value);
 };
 
 class Clock : public Input {
@@ -29,6 +29,7 @@ public:
     void onPinChanged(size_t pin) override;
 
     void simulate(void) override;
+    void setValue(Tristate value) override;
 };
 
 class Output : public SpecialComponent {

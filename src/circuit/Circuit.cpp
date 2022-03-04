@@ -43,7 +43,8 @@ Circuit::Circuit(const std::string& name) : _name(name) {
     _factory.insert(NTS_COMPONENT_FACTORY("4081", Component4081));
 
     //_factory.insert(NTS_COMPONENT_FACTORY("4069", Component4069));
-    //_factory.insert(NTS_COMPONENT_FACTORY_FN("4071", ComponentFactory::do4071));
+    //_factory.insert(NTS_COMPONENT_FACTORY_FN("4071",
+    // ComponentFactory::do4071));
 
     // Specific Logging component
     _factory.insert(NTS_COMPONENT_FACTORY("logger", Logger));
@@ -197,7 +198,7 @@ void Circuit::setInput(const std::string& name, Tristate value) {
 
     if (in == nullptr)
         throw FatalError(std::string("Component ") + name + " is not an input");
-    in->getPin(1).setState(value);
+    in->setValue(value);
 }
 
 Tristate Circuit::getOutput(const std::string& name) {

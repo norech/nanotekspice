@@ -29,6 +29,17 @@ void Input::setValue(Tristate value) { _pins[1]->setState(value); }
 
 Clock::Clock(const std::string& name) : Input(name) {}
 
+void Clock::setValue(Tristate value) {
+    // invert value since this is a clock and
+    // the simulate will invert it back
+    if (value == TRUE)
+        value = FALSE;
+    else if (value == FALSE)
+        value = TRUE;
+
+    Input::setValue(value);
+}
+
 void Clock::simulate(void) {
     auto& it = _pins[1];
     if (it->getState() == Tristate::UNDEFINED) {
