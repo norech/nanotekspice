@@ -13,15 +13,14 @@ int main(int argc, char *argv[]) {
 
     try {
         nts::CircuitParser circuitParser(argv[1]);
-        nts::CommandParser cp;
+        nts::CommandParser commandParser;
         std::string cmd;
 
-        std::unique_ptr<nts::Circuit> circuit =
-            std::unique_ptr<nts::Circuit>(circuitParser.parse());
+        std::unique_ptr<nts::Circuit> circuit(circuitParser.parse());
         std::cout << "> ";
         while (std::getline(std::cin, cmd)) {
             try {
-                cp.parseCommand(*circuit, cmd);
+                commandParser.parseCommand(*circuit, cmd);
             } catch (nts::RuntimeError &e) {
                 if (std::string(e.what()) == "exit") return 0;
                 std::cerr << e.what() << std::endl;
