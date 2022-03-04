@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "src/Error.hpp"
 #include "src/circuit/Circuit.hpp"
 #include "src/parser/CircuitParser.hpp"
 #include "src/parser/CommandParser.hpp"
@@ -21,14 +22,17 @@ int main(int argc, char *argv[]) {
         while (std::getline(std::cin, cmd)) {
             try {
                 cp.parseCommand(*circuit, cmd);
-            } catch (std::runtime_error &e) {
+            } catch (nts::RuntimeError &e) {
                 if (std::string(e.what()) == "exit") return 0;
                 std::cerr << e.what() << std::endl;
             }
             std::cout << "> ";
         }
-    } catch (std::runtime_error &e) {
+    } catch (nts::Error &e) {
         std::cerr << e.what() << std::endl;
+        return 84;
+    } catch (std::exception &e) {
+        std::cerr << "Internal error: " << e.what() << std::endl;
         return 84;
     }
 }
