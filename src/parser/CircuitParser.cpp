@@ -47,6 +47,9 @@ void CircuitParser::parseChipsets() {
         }
         _circuit->addComponent(type, name);
     }
+    if (_circuit->getComponents().size() == 0) {
+        throw FatalError("Error: no chipsets in circuit");
+    }
 }
 
 void CircuitParser::parseLinks() {
