@@ -122,8 +122,8 @@ private:
     };
 
 public:
-    // Pin1: Set, Pin2: Clock
-    // Pin3: Data, Pin4: Reset
+    // Pin1: Set, Pin2: Reset
+    // Pin3: Clock, Pin4: data
     // Pin5: Q, Pin6: ~Q
     DFlipFlopWithSetAndReset(const std::string& name = "DFlipFlopWithSetAndReset");
 };

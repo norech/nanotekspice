@@ -130,27 +130,27 @@ DFlipFlopWithSetAndReset::DFlipFlopWithSetAndReset(const std::string& name)
     this->setLink(6, *_nq, 3);
 
     _q->setLink(1, *this, 1);
-    _q->setLink(1, *_ins[1], 3);
+    _q->setLink(2, *_ins[1], 3);
     _q->setLink(2, *_nq, 3);
 
     _nq->setLink(1, *_q, 3);
     _nq->setLink(1, *_ins[2], 3);
-    _nq->setLink(2, *this, 4);
+    _nq->setLink(2, *this, 2);
 
     _ins[0]->setLink(1, *this, 1);
-    _ins[0]->setLink(1, *_ins[3], 3);
-    _ins[0]->setLink(2, *_ins[1], 3);
+    _ins[0]->setLink(2, *_ins[3], 3);
+    _ins[0]->setLink(2, *_ins[2], 1);
 
     _ins[1]->setLink(1, *_ins[0], 3);
-    _ins[1]->setLink(1, *this, 2);
-    _ins[1]->setLink(2, *this, 4);
+    _ins[1]->setLink(2, *this, 2);
+    _ins[1]->setLink(2, *this, 3);
 
-    _ins[2]->setLink(1, *_ins[1], 3);
-    _ins[2]->setLink(1, *this, 2);
-    _ins[2]->setLink(2, *_ins[3], 3);
+    _ins[2]->setLink(1, *_ins[0], 2);
+    _ins[2]->setLink(2, *this, 3);
+    _ins[2]->setLink(1, *_ins[3], 3);
 
     _ins[3]->setLink(1, *_ins[2], 3);
-    _ins[3]->setLink(1, *this, 3);
+    _ins[3]->setLink(2, *this, 2);
     _ins[3]->setLink(2, *this, 4);
 }
 
@@ -175,20 +175,20 @@ Component4013::Component4013(const std::string& name) : Component(name) {
     this->setLink(12, *_latches[1], 6);
 
     // Set clocks
-    _latches[0]->setLink(2, *this, 3);
-    _latches[0]->setLink(2, *this, 11);
+    _latches[0]->setLink(3, *this, 3);
+    _latches[0]->setLink(3, *this, 11);
 
     // Set Datas
-    _latches[0]->setLink(3, *this, 5);
-    _latches[1]->setLink(3, *this, 9);
+    _latches[0]->setLink(4, *this, 5);
+    _latches[1]->setLink(4, *this, 9);
 
     // Set sets
     _latches[0]->setLink(1, *this, 6);
     _latches[1]->setLink(1, *this, 8);
 
     // Set resets
-    _latches[0]->setLink(4, *this, 4);
-    _latches[1]->setLink(4, *this, 10);
+    _latches[0]->setLink(2, *this, 4);
+    _latches[1]->setLink(2, *this, 10);
 }
 
 }  // namespace nts
