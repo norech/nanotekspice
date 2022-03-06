@@ -48,7 +48,7 @@ void Logger::simulate() {
 
     if (this->compute(10) != FALSE)  // inhibit pin
         return;
-    if (this->compute(9) != TRUE)  // clock pin
+    if (this->compute(9) != FALSE)  // clock pin
         return;
 
     Tristate state;
